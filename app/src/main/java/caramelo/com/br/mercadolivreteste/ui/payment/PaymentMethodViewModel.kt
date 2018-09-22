@@ -1,41 +1,23 @@
 package caramelo.com.br.mercadolivreteste.ui.payment
 
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.*
+import android.support.annotation.VisibleForTesting
 import caramelo.com.br.mercadolivreteste.extension.RequestException
 import caramelo.com.br.mercadolivreteste.extension.addSource
 import caramelo.com.br.mercadolivreteste.model.Payment
 import caramelo.com.br.mercadolivreteste.model.PaymentMethod
 import caramelo.com.br.mercadolivreteste.repository.PaymentRepository
-import kotlinx.coroutines.experimental.android.UI
-import kotlinx.coroutines.experimental.launch
+import caramelo.com.br.mercadolivreteste.ui.base.BaseViewModel
 import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodState as State
 
 class PaymentMethodViewModel(
         val payment: Payment,
         private val repository: PaymentRepository
-) : ViewModel() {
+) : BaseViewModel() {
 
-    private val loadingState = MutableLiveData<State>()
-
-    private val buttonState = MutableLiveData<State>()
-        get() {
-            if (field.value == null) {
-                field.value = State.Idle()
-                disableNextButton()
-            }
-            return field
-        }
-
-    private val listState = MutableLiveData<State>()
-        get() {
-            if (field.value == null) {
-                field.value = State.Idle()
-                requestPaymentMethods()
-            }
-            return field
-        }
+    @VisibleForTesting val loadingState = MutableLiveData<State>()
+    @VisibleForTesting val buttonState = MutableLiveData<State>()
+    @VisibleForTesting val listState = MutableLiveData<State>()
 
     val state: MediatorLiveData<State>
         get() = MediatorLiveData<State>().apply {
@@ -44,13 +26,26 @@ class PaymentMethodViewModel(
             addSource(listState)
         }
 
-    private var paymentMethodList = listOf<PaymentMethod>()
+    val paymentMethodList = mutableListOf<PaymentMethod>()
 
-    private fun requestPaymentMethods() {
-        launch(UI) {
+    @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
+    fun initialize() {
+        if (listState.value == null) {
+            requestPaymentMethods()
+        }
+        if (buttonState.value == null) {
+            disableNextButton()
+        }
+    }
+
+    fun requestPaymentMethods() {
+        runJob {
             showLoading()
             try {
-                paymentMethodList = repository.creditCardPaymentMethods()
+                paymentMethodList.apply {
+                    clear()
+                    addAll(repository.creditCardPaymentMethods())
+                }
                 showPaymentMethods()
             } catch (e: RequestException) {
                 showError()
@@ -60,7 +55,7 @@ class PaymentMethodViewModel(
     }
 
     fun setPaymentMethod(id: String) {
-         val method = paymentMethodList.find { it.id == id }
+        val method = paymentMethodList.find { it.id == id }
         payment.paymentMethod = method
         enableNextButton()
     }
@@ -91,7 +86,6 @@ class PaymentMethodViewModel(
 }
 
 sealed class PaymentMethodState {
-    class Idle : State()
 
     data class Loading(val loading: Boolean) : State()
 

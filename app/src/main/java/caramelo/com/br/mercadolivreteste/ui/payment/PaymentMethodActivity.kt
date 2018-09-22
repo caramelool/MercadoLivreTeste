@@ -39,25 +39,6 @@ class PaymentMethodActivity : BaseActivity() {
         paymentMethodRecyclerView.adapter = adapter
         paymentMethodRecyclerView.setHasFixedSize(true)
 
-//        viewModel.loadingState.observe(this, Observer { state ->
-//            when(state) {
-//                is PaymentMethodState.Loading -> handlerLoading(state)
-//            }
-//        })
-//
-//        viewModel.buttonState.observe(this, Observer { state ->
-//            when(state) {
-//                is PaymentMethodState.Changes -> handlerChanges(state)
-//            }
-//        })
-//
-//        viewModel.listState.observe(this, Observer { state ->
-//            when(state) {
-//                is PaymentMethodState.Received -> handlerReceived(state)
-//                is PaymentMethodState.Error -> handlerError()
-//            }
-//        })
-
         viewModel.state.observe(this, Observer { state ->
             when(state) {
                 is PaymentMethodState.Loading -> handlerLoading(state)
@@ -66,6 +47,8 @@ class PaymentMethodActivity : BaseActivity() {
                 is PaymentMethodState.Error -> handlerError()
             }
         })
+
+        lifecycle.addObserver(viewModel)
     }
 
     private fun handlerChanges(state: PaymentMethodState.Changes) {

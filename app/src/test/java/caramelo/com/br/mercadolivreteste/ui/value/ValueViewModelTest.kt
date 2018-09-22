@@ -1,28 +1,19 @@
 package caramelo.com.br.mercadolivreteste.ui.value
 
-import android.arch.core.executor.testing.InstantTaskExecutorRule
 import android.arch.lifecycle.Observer
-import org.junit.Assert
+import caramelo.com.br.mercadolivreteste.BaseUnitTest
 import org.junit.Assert.*
 import org.junit.Before
-import org.junit.Rule
 import org.junit.Test
 
-import org.junit.runner.RunWith
 import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito.*
-import org.mockito.junit.MockitoJUnitRunner
 
-@RunWith(MockitoJUnitRunner::class)
-class ValueViewModelTest {
-
-    @Rule
-    @JvmField
-    val rule = InstantTaskExecutorRule()
+class ValueViewModelTest : BaseUnitTest() {
 
     @Mock
-    lateinit var observerState: Observer<ValueState>
+    private lateinit var observerState: Observer<ValueState>
 
     private lateinit var viewModel: ValueViewModel
 
@@ -40,8 +31,8 @@ class ValueViewModelTest {
         val expectedState = ValueState.Changes.NextButton(true)
 
         argumentCaptor.run {
-            verify(observerState, times(2)).onChanged(capture())
-            val (_, state) = allValues
+            verify(observerState, times(1)).onChanged(capture())
+            val (state) = allValues
             assertEquals(state, expectedState)
         }
     }
@@ -54,8 +45,8 @@ class ValueViewModelTest {
         val expectedState = ValueState.Changes.NextButton(false)
 
         argumentCaptor.run {
-            verify(observerState, times(2)).onChanged(capture())
-            val (_, state) = allValues
+            verify(observerState, times(1)).onChanged(capture())
+            val (state) = allValues
             assertEquals(state, expectedState)
         }
     }

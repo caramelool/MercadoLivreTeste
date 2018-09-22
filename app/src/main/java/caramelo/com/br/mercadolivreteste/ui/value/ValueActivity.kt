@@ -43,6 +43,8 @@ class ValueActivity : BaseActivity(), CurrentMaskListener {
                 is ValueState.Changes -> handlerChanges(state)
             }
         })
+
+        lifecycle.addObserver(viewModel)
     }
 
     override fun onValueChange(value: Float) {
