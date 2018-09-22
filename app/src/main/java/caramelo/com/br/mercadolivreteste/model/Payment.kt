@@ -2,6 +2,7 @@ package caramelo.com.br.mercadolivreteste.model
 
 import android.app.Activity
 import android.os.Parcelable
+import com.google.gson.annotations.SerializedName
 import dagger.Module
 import dagger.Provides
 import kotlinx.android.parcel.Parcelize
@@ -13,6 +14,14 @@ data class Payment(
         var bankId: String = ""
 ) : Parcelable
 
+@Parcelize
+data class PaymentMethod(
+        @SerializedName("id") val id: String,
+        @SerializedName("name") val name: String,
+        @SerializedName("payment_type_id") val type: String,
+        @SerializedName("status") val status: String,
+        @SerializedName("thumbnail") val thumbnail: String
+) : Parcelable
 
 const val EXTRA_PAYMENT = "extra_payment"
 
