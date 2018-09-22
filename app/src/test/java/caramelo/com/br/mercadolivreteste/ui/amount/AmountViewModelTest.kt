@@ -1,4 +1,4 @@
-package caramelo.com.br.mercadolivreteste.ui.value
+package caramelo.com.br.mercadolivreteste.ui.amount
 
 import android.arch.lifecycle.Observer
 import caramelo.com.br.mercadolivreteste.BaseUnitTest
@@ -10,25 +10,25 @@ import org.mockito.ArgumentCaptor
 import org.mockito.Mock
 import org.mockito.Mockito.*
 
-class ValueViewModelTest : BaseUnitTest() {
+class AmountViewModelTest : BaseUnitTest() {
 
     @Mock
-    private lateinit var observerState: Observer<ValueState>
+    private lateinit var observerState: Observer<AmountState>
 
-    private lateinit var viewModel: ValueViewModel
+    private lateinit var viewModel: AmountViewModel
 
     @Before
     fun setUp() {
-        viewModel = spy(ValueViewModel())
+        viewModel = spy(AmountViewModel())
         viewModel.state.observeForever(observerState)
     }
 
     @Test
     fun `when value was more then 0 should enable button`() {
-        viewModel.value = 100f
+        viewModel.amount = 100f
 
-        val argumentCaptor = ArgumentCaptor.forClass(ValueState::class.java)
-        val expectedState = ValueState.Layout.NextButton(true)
+        val argumentCaptor = ArgumentCaptor.forClass(AmountState::class.java)
+        val expectedState = AmountState.Layout.NextButton(true)
 
         argumentCaptor.run {
             verify(observerState, times(1)).onChanged(capture())
@@ -39,10 +39,10 @@ class ValueViewModelTest : BaseUnitTest() {
 
     @Test
     fun `when value was less or equals 0 should disable button`() {
-        viewModel.value = 0f
+        viewModel.amount = 0f
 
-        val argumentCaptor = ArgumentCaptor.forClass(ValueState::class.java)
-        val expectedState = ValueState.Layout.NextButton(false)
+        val argumentCaptor = ArgumentCaptor.forClass(AmountState::class.java)
+        val expectedState = AmountState.Layout.NextButton(false)
 
         argumentCaptor.run {
             verify(observerState, times(1)).onChanged(capture())
@@ -53,7 +53,7 @@ class ValueViewModelTest : BaseUnitTest() {
 
     @Test
     fun `check if the payment value is equals value variable in presenter`() {
-        viewModel.value = 100f
-        assert(viewModel.payment.value == viewModel.value)
+        viewModel.amount = 100f
+        assert(viewModel.payment.amount == viewModel.amount)
     }
 }

@@ -5,15 +5,15 @@ import caramelo.com.br.mercadolivreteste.ui.bank.BankActivity
 import caramelo.com.br.mercadolivreteste.ui.bank.BankModule
 import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodActivity
 import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodModule
-import caramelo.com.br.mercadolivreteste.ui.value.ValueActivity
-import caramelo.com.br.mercadolivreteste.ui.value.ValueModule
+import caramelo.com.br.mercadolivreteste.ui.amount.AmountActivity
+import caramelo.com.br.mercadolivreteste.ui.amount.AmountModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
 @Module
 abstract class ActivityContributesModule {
-    @ContributesAndroidInjector(modules = [ValueModule::class])
-    abstract fun contributesValueActivity() : ValueActivity
+    @ContributesAndroidInjector(modules = [AmountModule::class])
+    abstract fun contributesValueActivity() : AmountActivity
 
     @ContributesAndroidInjector(modules = [PaymentMethodModule::class, PaymentModule::class])
     abstract fun contributesPaymentMethodActivity() : PaymentMethodActivity

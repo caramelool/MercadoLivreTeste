@@ -9,7 +9,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Payment(
-        var value: Float = 0f,
+        var amount: Float = 0f,
         var methodId: String = "",
         var bankId: String = ""
 ) : Parcelable

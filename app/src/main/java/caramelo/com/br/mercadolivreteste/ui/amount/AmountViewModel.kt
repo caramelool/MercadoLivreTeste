@@ -1,4 +1,4 @@
-package caramelo.com.br.mercadolivreteste.ui.value
+package caramelo.com.br.mercadolivreteste.ui.amount
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.MediatorLiveData
@@ -7,9 +7,9 @@ import android.arch.lifecycle.OnLifecycleEvent
 import caramelo.com.br.mercadolivreteste.extension.addSource
 import caramelo.com.br.mercadolivreteste.model.Payment
 import caramelo.com.br.mercadolivreteste.ui.base.BaseViewModel
-import caramelo.com.br.mercadolivreteste.ui.value.ValueState as State
+import caramelo.com.br.mercadolivreteste.ui.amount.AmountState as State
 
-class ValueViewModel : BaseViewModel() {
+class AmountViewModel : BaseViewModel() {
 
     private val buttonState = MutableLiveData<State>()
 
@@ -17,7 +17,7 @@ class ValueViewModel : BaseViewModel() {
         addSource(buttonState)
     }
 
-    var value: Float = 0f
+    var amount: Float = 0f
         set(value) {
             field = value
             if (field > 0f) {
@@ -28,7 +28,7 @@ class ValueViewModel : BaseViewModel() {
         }
 
     val payment: Payment
-        get() = Payment(value)
+        get() = Payment(amount)
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     private fun initState() {
@@ -46,7 +46,7 @@ class ValueViewModel : BaseViewModel() {
     }
 }
 
-sealed class ValueState {
+sealed class AmountState {
     sealed class Layout : State() {
         data class NextButton(val enable: Boolean) : Layout()
     }

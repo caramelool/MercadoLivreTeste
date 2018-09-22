@@ -22,8 +22,8 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ui.value.ValueActivity"
-            android:label="@string/app_name"
+            android:name=".ui.amount.AmountActivity"
+            android:label="@string/title_activity_amount"
             android:theme="@style/AppTheme.NoActionBar"
             android:windowSoftInputMode="adjustResize" />
         <activity
