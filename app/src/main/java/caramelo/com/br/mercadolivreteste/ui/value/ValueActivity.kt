@@ -1,5 +1,6 @@
 package caramelo.com.br.mercadolivreteste.ui.value
 
+import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -14,10 +15,10 @@ import kotlinx.android.synthetic.main.activity_value.*
 import kotlinx.android.synthetic.main.content_value.*
 import javax.inject.Inject
 
-class ValueActivity : BaseActivity(), ValueView, CurrentMaskListener {
+class ValueActivity : BaseActivity(), CurrentMaskListener {
 
     @Inject
-    lateinit var presenter: ValuePresenter
+    lateinit var viewModel: ValueViewModel
 
     companion object {
         fun getIntent(context: Context): Intent {
@@ -36,23 +37,29 @@ class ValueActivity : BaseActivity(), ValueView, CurrentMaskListener {
         nextButton.setOnClickListener {
             openPaymentMethod()
         }
+
+        viewModel.state.observe(this, Observer { state ->
+            when(state) {
+                is ValueState.Changes -> handlerChanges(state)
+            }
+        })
     }
 
     override fun onValueChange(value: Float) {
-        presenter.value = value
+        viewModel.value = value
     }
 
-    override fun disableButton() {
-        nextButton.isEnabled = false
-    }
-
-    override fun enableButton() {
-        nextButton.isEnabled = true
+    private fun handlerChanges(state: ValueState.Changes) {
+        when(state) {
+            is ValueState.Changes.NextButton -> {
+                nextButton.isEnabled = state.enable
+            }
+        }
     }
 
     private fun openPaymentMethod() {
         val intent = PaymentMethodActivity.getIntent(
-                this, presenter.payment)
+                this, viewModel.payment)
         startActivity(intent)
     }
 }

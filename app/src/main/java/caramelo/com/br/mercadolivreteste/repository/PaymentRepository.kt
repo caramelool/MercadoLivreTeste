@@ -9,7 +9,7 @@ class PaymentRepository @Inject constructor(
         private val api: PaymentApi
 ) {
 
-    suspend fun requestPaymentMethods(): List<PaymentMethod> {
+    suspend fun creditCardPaymentMethods(): List<PaymentMethod> {
         val list = api.paymentMethods(BuildConfig.PUBLIC_KEY).request()
         return list.filter { it.type == "credit_card" && it.status == "active" }
     }

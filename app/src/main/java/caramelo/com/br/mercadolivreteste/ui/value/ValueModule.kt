@@ -1,10 +1,19 @@
 package caramelo.com.br.mercadolivreteste.ui.value
 
-import dagger.Binds
+import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import dagger.Module
+import dagger.Provides
 
 @Module
-abstract class ValueModule {
-    @Binds
-    abstract fun bindView(activity: ValueActivity): ValueView
+class ValueModule {
+    @Provides
+    fun provideActivity(activity: ValueActivity): Activity {
+        return activity
+    }
+
+    @Provides
+    fun provideViewModel(activity: ValueActivity): ValueViewModel {
+        return ViewModelProviders.of(activity)[ValueViewModel::class.java]
+    }
 }
