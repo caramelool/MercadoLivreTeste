@@ -8,7 +8,7 @@ import android.view.View
 import caramelo.com.br.mercadolivreteste.R
 import caramelo.com.br.mercadolivreteste.model.EXTRA_PAYMENT
 import caramelo.com.br.mercadolivreteste.model.Payment
-import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodState as State
+import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodViewModel.State
 import caramelo.com.br.mercadolivreteste.ui.bank.BankActivity
 import caramelo.com.br.mercadolivreteste.ui.base.BaseActivity
 import caramelo.com.br.mercadolivreteste.ui.base.ItemAdapter

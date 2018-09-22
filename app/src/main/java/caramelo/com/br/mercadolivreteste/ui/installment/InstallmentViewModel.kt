@@ -1,65 +1,59 @@
-package caramelo.com.br.mercadolivreteste.ui.bank
+package caramelo.com.br.mercadolivreteste.ui.installment
 
 import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.OnLifecycleEvent
-import android.support.annotation.VisibleForTesting
 import caramelo.com.br.mercadolivreteste.extension.RequestException
 import caramelo.com.br.mercadolivreteste.extension.addSource
-import caramelo.com.br.mercadolivreteste.model.Bank
+import caramelo.com.br.mercadolivreteste.model.Installment
 import caramelo.com.br.mercadolivreteste.model.Payment
 import caramelo.com.br.mercadolivreteste.repository.PaymentRepository
 import caramelo.com.br.mercadolivreteste.ui.base.BaseViewModel
 
-class BankViewModel(
+class InstallmentViewModel(
         val payment: Payment,
-        private val repository: PaymentRepository
+        val repository: PaymentRepository
 ) : BaseViewModel() {
 
     private val loadingState = MutableLiveData<State>()
-    @VisibleForTesting val buttonState = MutableLiveData<State>()
-    @VisibleForTesting val listState = MutableLiveData<State>()
+    private val payButtonState = MutableLiveData<State>()
+    private val amountTextState = MutableLiveData<State>()
+    private val listState = MutableLiveData<State>()
 
-    val state: MediatorLiveData<State>
-        get() = MediatorLiveData<State>().apply {
-            addSource(loadingState)
-            addSource(buttonState)
-            addSource(listState)
-        }
+    val state = MediatorLiveData<State>().apply {
+        addSource(loadingState)
+        addSource(payButtonState)
+        addSource(amountTextState)
+        addSource(listState)
+    }
 
-    private var bankList = listOf<Bank>()
+    private lateinit var installment: Installment
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun initialize() {
-        if (listState.value == null) {
-            requestBanks()
+        if (payButtonState.value == null) {
+            disablePayButton()
         }
-        if (buttonState.value == null) {
-            disableNextButton()
+
+        if (listState.value == null) {
+            requestInstallment()
         }
     }
 
-    fun requestBanks() {
+    fun requestInstallment() {
         runJob {
             showLoading()
             try {
-                bankList = repository.banks(payment.methodId)
-                if (bankList.isNotEmpty()) {
-                    showPaymentMethods()
-                } else {
+                installment = repository.installment(payment)
+                if (installment.payerCosts.isEmpty()) {
                     showEmpty()
                 }
             } catch (e: RequestException) {
-                showError()
+               showError()
             }
             hideLoading()
         }
-    }
-
-    fun setBank(id: String) {
-        payment.bankId = id
-        enableNextButton()
     }
 
     private fun showLoading() {
@@ -70,20 +64,16 @@ class BankViewModel(
         loadingState.postValue(State.Layout.Loading(false))
     }
 
-    private fun enableNextButton() {
-        buttonState.postValue(State.Layout.NextButton(true))
+    private fun enablePayButton() {
+        payButtonState.postValue(State.Layout.PayButton(true))
     }
 
-    private fun disableNextButton() {
-        buttonState.postValue(State.Layout.NextButton(false))
+    private fun disablePayButton() {
+        payButtonState.postValue(State.Layout.PayButton(false))
     }
 
     private fun showEmpty() {
         listState.postValue(State.Received.Empty)
-    }
-
-    private fun showPaymentMethods() {
-        listState.postValue(State.Received.Banks(bankList))
     }
 
     private fun showError() {
@@ -91,17 +81,15 @@ class BankViewModel(
     }
 
     sealed class State {
-
         sealed class Layout : State() {
             data class Loading(val loading: Boolean) : Layout()
-            data class NextButton(val enable: Boolean) : Layout()
+            data class PayButton(val enable: Boolean) : Layout()
+            data class AmountText(val text: String) : Layout()
         }
 
         sealed class Received : State() {
-            data class Banks(val list: List<Bank>) : Received()
             object Empty : Received()
             object Error : Received()
         }
     }
-
 }

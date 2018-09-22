@@ -5,8 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".ui.payment.PaymentMethodActivity"
-    tools:showIn="@layout/activity_payment_method">
+    tools:context=".ui.installment.InstallmentActivity"
+    tools:showIn="@layout/activity_installment">
 
     <include layout="@layout/view_empty" />
 
@@ -14,26 +14,26 @@
         android:id="@+id/loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/nextButton"
+        app:layout_constraintBottom_toTopOf="@id/payButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/paymentMethodRecyclerView"
+        android:id="@+id/installmentRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layoutManager="android.support.v7.widget.GridLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/nextButton"
+        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
+        app:layout_constraintBottom_toTopOf="@id/payButton"
         app:layout_constraintTop_toTopOf="parent"
-        app:spanCount="3"
-        tools:listitem="@layout/adapter_item" />
+        tools:itemCount="1"
+        tools:listitem="@layout/adapter_installment" />
 
     <Button
-        android:id="@+id/nextButton"
+        android:id="@+id/payButton"
         android:layout_width="match_parent"
         android:layout_height="@dimen/btn_height"
-        android:text="@string/button_next"
+        android:text="@string/button_pay"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

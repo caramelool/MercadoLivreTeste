@@ -33,7 +33,11 @@
         <activity
             android:name=".ui.bank.BankActivity"
             android:label="@string/title_activity_bank"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.installment.InstallmentActivity"
+            android:label="@string/title_activity_installment"
+            android:theme="@style/AppTheme.NoActionBar" />
     </application>
 
 </manifest>

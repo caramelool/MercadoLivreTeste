@@ -15,7 +15,7 @@ class SplashActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash)
         launch(UI) {
-            delay(1, TimeUnit.SECONDS)
+            delay(2, TimeUnit.SECONDS)
             openAmount()
         }
     }

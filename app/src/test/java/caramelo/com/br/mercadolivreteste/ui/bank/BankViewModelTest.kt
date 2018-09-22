@@ -6,7 +6,7 @@ import caramelo.com.br.mercadolivreteste.extension.RequestException
 import caramelo.com.br.mercadolivreteste.model.Bank
 import caramelo.com.br.mercadolivreteste.model.Payment
 import caramelo.com.br.mercadolivreteste.repository.PaymentRepository
-import caramelo.com.br.mercadolivreteste.ui.bank.BankState as State
+import caramelo.com.br.mercadolivreteste.ui.bank.BankViewModel.State
 import com.nhaarman.mockitokotlin2.whenever
 import kotlinx.coroutines.experimental.runBlocking
 import org.junit.Before
@@ -90,7 +90,7 @@ class BankViewModelTest : BaseUnitTest() {
 
         val argumentCaptor = ArgumentCaptor.forClass(State::class.java)
         val expectedShowLoadingState = State.Layout.Loading(true)
-        val expectedReceivedState = State.Received.Empty()
+        val expectedReceivedState = State.Received.Empty
         val expectedHideLoadingState = State.Layout.Loading(false)
 
         argumentCaptor.run {
@@ -98,7 +98,7 @@ class BankViewModelTest : BaseUnitTest() {
 
             val (showLoading, receivedData, hideLoading) = allValues
             assertEquals(showLoading, expectedShowLoadingState)
-            assertEquals(receivedData.javaClass, expectedReceivedState.javaClass)
+            assertEquals(receivedData, expectedReceivedState)
             assertEquals(hideLoading, expectedHideLoadingState)
         }
     }
@@ -137,14 +137,14 @@ class BankViewModelTest : BaseUnitTest() {
 
         val argumentCaptor = ArgumentCaptor.forClass(State::class.java)
         val expectedShowLoadingState = State.Layout.Loading(true)
-        val expectedReceivedState = State.Received.Error()
+        val expectedReceivedState = State.Received.Error
         val expectedHideLoadingState = State.Layout.Loading(false)
 
         argumentCaptor.run {
             verify(observerState, times(3)).onChanged(capture())
             val (showLoading, receivedData, hideLoading) = allValues
             assertEquals(showLoading, expectedShowLoadingState)
-            assertEquals(receivedData.javaClass, expectedReceivedState.javaClass)
+            assertEquals(receivedData, expectedReceivedState)
             assertEquals(hideLoading, expectedHideLoadingState)
         }
     }

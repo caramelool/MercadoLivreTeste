@@ -27,7 +27,7 @@
         app:layout_constraintBottom_toTopOf="@id/nextButton"
         app:layout_constraintTop_toTopOf="parent"
         app:spanCount="3"
-        tools:listitem="@layout/item_adapter" />
+        tools:listitem="@layout/adapter_item" />
 
     <Button
         android:id="@+id/nextButton"

@@ -7,6 +7,8 @@ import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodActivity
 import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodModule
 import caramelo.com.br.mercadolivreteste.ui.amount.AmountActivity
 import caramelo.com.br.mercadolivreteste.ui.amount.AmountModule
+import caramelo.com.br.mercadolivreteste.ui.installment.InstallmentActivity
+import caramelo.com.br.mercadolivreteste.ui.installment.InstallmentModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 
@@ -20,4 +22,7 @@ abstract class ActivityContributesModule {
 
     @ContributesAndroidInjector(modules = [BankModule::class, PaymentModule::class])
     abstract fun contributesBankActivity() : BankActivity
+
+    @ContributesAndroidInjector(modules = [InstallmentModule::class, PaymentModule::class])
+    abstract fun contributesInstallmentActivity() : InstallmentActivity
 }

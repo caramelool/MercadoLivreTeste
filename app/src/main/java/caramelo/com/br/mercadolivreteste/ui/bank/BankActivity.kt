@@ -8,10 +8,11 @@ import android.view.View
 import caramelo.com.br.mercadolivreteste.R
 import caramelo.com.br.mercadolivreteste.model.EXTRA_PAYMENT
 import caramelo.com.br.mercadolivreteste.model.Payment
-import caramelo.com.br.mercadolivreteste.ui.bank.BankState as State
+import caramelo.com.br.mercadolivreteste.ui.bank.BankViewModel.State
 import caramelo.com.br.mercadolivreteste.ui.base.BaseActivity
 import caramelo.com.br.mercadolivreteste.ui.base.ItemAdapter
 import caramelo.com.br.mercadolivreteste.ui.base.ItemData
+import caramelo.com.br.mercadolivreteste.ui.installment.InstallmentActivity
 import dagger.android.AndroidInjection
 
 import kotlinx.android.synthetic.main.activity_bank.*
@@ -98,7 +99,7 @@ class BankActivity : BaseActivity() {
     }
 
     private fun goToInstallment() {
-        val intent = BankActivity.getIntent(this, viewModel.payment)
+        val intent = InstallmentActivity.getIntent(this, viewModel.payment)
         startActivity(intent)
     }
 }

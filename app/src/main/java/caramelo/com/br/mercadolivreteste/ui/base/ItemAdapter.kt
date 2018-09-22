@@ -4,13 +4,10 @@ import android.os.Parcelable
 import android.support.annotation.DrawableRes
 import caramelo.com.br.mercadolivreteste.R
 import android.support.v7.widget.RecyclerView
-import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import caramelo.com.br.mercadolivreteste.extension.loadGif
 import caramelo.com.br.mercadolivreteste.extension.loadImage
 import kotlinx.android.parcel.Parcelize
-import kotlinx.android.synthetic.main.item_adapter.view.*
+import kotlinx.android.synthetic.main.adapter_item.view.*
 
 class ItemAdapter(
         @DrawableRes private val placeholder: Int,
@@ -23,10 +20,8 @@ class ItemAdapter(
             notifyDataSetChanged()
         }
 
-    override fun onCreateViewHolder(group: ViewGroup, type: Int): ItemHolder {
-        val view = LayoutInflater.from(group.context)
-                .inflate(R.layout.item_adapter, group, false)
-        return ItemHolder(view)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ItemHolder {
+        return ItemHolder(parent)
     }
 
     override fun getItemCount() = data.size
@@ -37,8 +32,8 @@ class ItemAdapter(
     }
 
     inner class ItemHolder(
-            view: View
-    ) : RecyclerView.ViewHolder(view) {
+            parent: ViewGroup
+    ) : BaseViewHolder(parent, R.layout.adapter_item) {
 
         fun bind(item: ItemData) {
             with(itemView) {

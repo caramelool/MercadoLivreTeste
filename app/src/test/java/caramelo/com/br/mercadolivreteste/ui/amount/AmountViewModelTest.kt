@@ -2,6 +2,7 @@ package caramelo.com.br.mercadolivreteste.ui.amount
 
 import android.arch.lifecycle.Observer
 import caramelo.com.br.mercadolivreteste.BaseUnitTest
+import caramelo.com.br.mercadolivreteste.ui.amount.AmountViewModel.State
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Test
@@ -13,7 +14,7 @@ import org.mockito.Mockito.*
 class AmountViewModelTest : BaseUnitTest() {
 
     @Mock
-    private lateinit var observerState: Observer<AmountState>
+    private lateinit var observerState: Observer<State>
 
     private lateinit var viewModel: AmountViewModel
 
@@ -27,8 +28,8 @@ class AmountViewModelTest : BaseUnitTest() {
     fun `when value was more then 0 should enable button`() {
         viewModel.amount = 100f
 
-        val argumentCaptor = ArgumentCaptor.forClass(AmountState::class.java)
-        val expectedState = AmountState.Layout.NextButton(true)
+        val argumentCaptor = ArgumentCaptor.forClass(State::class.java)
+        val expectedState = State.Layout.NextButton(true)
 
         argumentCaptor.run {
             verify(observerState, times(1)).onChanged(capture())
@@ -41,8 +42,8 @@ class AmountViewModelTest : BaseUnitTest() {
     fun `when value was less or equals 0 should disable button`() {
         viewModel.amount = 0f
 
-        val argumentCaptor = ArgumentCaptor.forClass(AmountState::class.java)
-        val expectedState = AmountState.Layout.NextButton(false)
+        val argumentCaptor = ArgumentCaptor.forClass(State::class.java)
+        val expectedState = State.Layout.NextButton(false)
 
         argumentCaptor.run {
             verify(observerState, times(1)).onChanged(capture())

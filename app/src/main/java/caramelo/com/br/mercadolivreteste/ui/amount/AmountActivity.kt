@@ -7,7 +7,7 @@ import android.os.Bundle
 import caramelo.com.br.mercadolivreteste.R
 import caramelo.com.br.mercadolivreteste.extension.CurrentMaskListener
 import caramelo.com.br.mercadolivreteste.extension.addCurrentMask
-import caramelo.com.br.mercadolivreteste.ui.amount.AmountState as State
+import caramelo.com.br.mercadolivreteste.ui.amount.AmountViewModel.State
 import caramelo.com.br.mercadolivreteste.ui.base.BaseActivity
 import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodActivity
 import dagger.android.AndroidInjection

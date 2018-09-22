@@ -8,7 +8,6 @@ import caramelo.com.br.mercadolivreteste.model.Payment
 import caramelo.com.br.mercadolivreteste.model.PaymentMethod
 import caramelo.com.br.mercadolivreteste.repository.PaymentRepository
 import caramelo.com.br.mercadolivreteste.ui.base.BaseViewModel
-import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodState as State
 
 class PaymentMethodViewModel(
         val payment: Payment,
@@ -77,7 +76,7 @@ class PaymentMethodViewModel(
     }
 
     private fun showEmpty() {
-        listState.postValue(State.Received.Empty())
+        listState.postValue(State.Received.Empty)
     }
 
     private fun showPaymentMethods() {
@@ -85,20 +84,20 @@ class PaymentMethodViewModel(
     }
 
     private fun showError() {
-        listState.postValue(State.Received.Error())
-    }
-}
-
-sealed class PaymentMethodState {
-
-    sealed class Layout : State() {
-        data class Loading(val loading: Boolean) : Layout()
-        data class NextButton(val enable: Boolean) : Layout()
+        listState.postValue(State.Received.Error)
     }
 
-    sealed class Received : State() {
-        data class PaymentMethods(val list: List<PaymentMethod>) : Received()
-        class Empty : Received()
-        class Error : Received()
+    sealed class State {
+
+        sealed class Layout : State() {
+            data class Loading(val loading: Boolean) : Layout()
+            data class NextButton(val enable: Boolean) : Layout()
+        }
+
+        sealed class Received : State() {
+            data class PaymentMethods(val list: List<PaymentMethod>) : Received()
+            object Empty : Received()
+            object Error : Received()
+        }
     }
 }

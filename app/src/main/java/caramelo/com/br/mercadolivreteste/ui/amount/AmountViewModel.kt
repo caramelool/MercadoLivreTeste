@@ -7,7 +7,6 @@ import android.arch.lifecycle.OnLifecycleEvent
 import caramelo.com.br.mercadolivreteste.extension.addSource
 import caramelo.com.br.mercadolivreteste.model.Payment
 import caramelo.com.br.mercadolivreteste.ui.base.BaseViewModel
-import caramelo.com.br.mercadolivreteste.ui.amount.AmountState as State
 
 class AmountViewModel : BaseViewModel() {
 
@@ -44,10 +43,10 @@ class AmountViewModel : BaseViewModel() {
     private fun disableNextButton() {
         buttonState.postValue(State.Layout.NextButton(false))
     }
-}
 
-sealed class AmountState {
-    sealed class Layout : State() {
-        data class NextButton(val enable: Boolean) : Layout()
+    sealed class State {
+        sealed class Layout : State() {
+            data class NextButton(val enable: Boolean) : Layout()
+        }
     }
 }
