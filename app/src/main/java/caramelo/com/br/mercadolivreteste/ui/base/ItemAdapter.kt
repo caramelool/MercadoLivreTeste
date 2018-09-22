@@ -1,16 +1,19 @@
 package caramelo.com.br.mercadolivreteste.ui.base
 
 import android.os.Parcelable
+import android.support.annotation.DrawableRes
 import caramelo.com.br.mercadolivreteste.R
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import caramelo.com.br.mercadolivreteste.extension.loadGif
 import caramelo.com.br.mercadolivreteste.extension.loadImage
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.item_adapter.view.*
 
 class ItemAdapter(
+        @DrawableRes private val placeholder: Int,
         private val onItemSelected: (String) -> Unit
 ) : RecyclerView.Adapter<ItemAdapter.ItemHolder>() {
 
@@ -40,7 +43,7 @@ class ItemAdapter(
         fun bind(item: ItemData) {
             with(itemView) {
                 itemText.text = item.name
-                itemImage.loadImage(item.thumbnail)
+                itemImage.loadImage(item.thumbnail, placeholder)
                 itemRadio.isChecked = item.selected
 
                 setOnClickListener {

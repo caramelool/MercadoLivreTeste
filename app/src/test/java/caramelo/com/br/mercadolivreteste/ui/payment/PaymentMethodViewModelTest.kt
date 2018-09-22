@@ -76,6 +76,27 @@ class PaymentMethodViewModelTest : BaseUnitTest() {
     }
 
     @Test
+    fun `should show empty view when received a payment methods list empty`() = runBlocking {
+
+        doReturn(emptyList<PaymentMethod>()).whenever(repository).creditCardPaymentMethods()
+
+        viewModel.requestPaymentMethods()
+
+        val argumentCaptor = ArgumentCaptor.forClass(PaymentMethodState::class.java)
+        val expectedShowLoadingState = PaymentMethodState.Loading(true)
+        val expectedReceivedState = PaymentMethodState.Received.Empty()
+        val expectedHideLoadingState = PaymentMethodState.Loading(false)
+
+        argumentCaptor.run {
+            verify(observerState, times(3)).onChanged(capture())
+            val (showLoading, receivedData, hideLoading) = allValues
+            assertEquals(showLoading, expectedShowLoadingState)
+            assertEquals(receivedData.javaClass, expectedReceivedState.javaClass)
+            assertEquals(hideLoading, expectedHideLoadingState)
+        }
+    }
+
+    @Test
     fun `should bind the list when received the payment methods`() = runBlocking {
 
         doReturn(paymentMethodListMock).whenever(repository).creditCardPaymentMethods()
@@ -85,7 +106,6 @@ class PaymentMethodViewModelTest : BaseUnitTest() {
         val argumentCaptor = ArgumentCaptor.forClass(PaymentMethodState::class.java)
         val expectedShowLoadingState = PaymentMethodState.Loading(true)
         val expectedReceivedState = PaymentMethodState.Received.PaymentMethods(paymentMethodListMock)
-        val expectedReceivedErrorState = PaymentMethodState.Error()
         val expectedHideLoadingState = PaymentMethodState.Loading(false)
 
         argumentCaptor.run {
@@ -93,7 +113,6 @@ class PaymentMethodViewModelTest : BaseUnitTest() {
             val (showLoading, receivedData, hideLoading) = allValues
             assertEquals(showLoading, expectedShowLoadingState)
             assertEquals(receivedData, expectedReceivedState)
-            assertNotEquals(receivedData, expectedReceivedErrorState)
             assertEquals(hideLoading, expectedHideLoadingState)
         }
     }
@@ -107,16 +126,14 @@ class PaymentMethodViewModelTest : BaseUnitTest() {
 
         val argumentCaptor = ArgumentCaptor.forClass(PaymentMethodState::class.java)
         val expectedShowLoadingState = PaymentMethodState.Loading(true)
-        val expectedReceivedState = PaymentMethodState.Received.PaymentMethods(paymentMethodListMock)
-        val expectedReceivedErrorState = PaymentMethodState.Error()
+        val expectedReceivedState = PaymentMethodState.Received.Error()
         val expectedHideLoadingState = PaymentMethodState.Loading(false)
 
         argumentCaptor.run {
             verify(observerState, times(3)).onChanged(capture())
             val (showLoading, receivedData, hideLoading) = allValues
             assertEquals(showLoading, expectedShowLoadingState)
-            assertNotEquals(receivedData, expectedReceivedState)
-            assertEquals(receivedData.javaClass, expectedReceivedErrorState.javaClass)
+            assertEquals(receivedData.javaClass, expectedReceivedState.javaClass)
             assertEquals(hideLoading, expectedHideLoadingState)
         }
     }

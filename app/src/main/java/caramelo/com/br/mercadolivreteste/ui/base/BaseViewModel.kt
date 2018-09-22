@@ -1,16 +1,12 @@
 package caramelo.com.br.mercadolivreteste.ui.base
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.LifecycleObserver
-import android.arch.lifecycle.OnLifecycleEvent
-import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.*
 import android.support.annotation.VisibleForTesting
 import kotlinx.coroutines.experimental.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlin.coroutines.experimental.CoroutineContext
 
-abstract class BaseViewModel(
-): ViewModel(), LifecycleObserver {
+abstract class BaseViewModel: ViewModel(), LifecycleObserver {
 
     private var jobContext: CoroutineContext = UI
 
@@ -32,5 +28,12 @@ abstract class BaseViewModel(
     @VisibleForTesting
     fun enableUnitTest() {
         jobContext = Unconfined
+    }
+
+    class Factory<T : ViewModel>(private val viewModel: () -> T): ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return viewModel() as T
+        }
     }
 }

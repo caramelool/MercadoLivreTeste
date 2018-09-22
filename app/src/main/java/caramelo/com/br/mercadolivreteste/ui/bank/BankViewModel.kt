@@ -1,23 +1,25 @@
-package caramelo.com.br.mercadolivreteste.ui.payment
+package caramelo.com.br.mercadolivreteste.ui.bank
 
-import android.arch.lifecycle.*
-import android.support.annotation.VisibleForTesting
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.MediatorLiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.OnLifecycleEvent
 import caramelo.com.br.mercadolivreteste.extension.RequestException
 import caramelo.com.br.mercadolivreteste.extension.addSource
+import caramelo.com.br.mercadolivreteste.model.Bank
 import caramelo.com.br.mercadolivreteste.model.Payment
-import caramelo.com.br.mercadolivreteste.model.PaymentMethod
 import caramelo.com.br.mercadolivreteste.repository.PaymentRepository
 import caramelo.com.br.mercadolivreteste.ui.base.BaseViewModel
-import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodState as State
+import caramelo.com.br.mercadolivreteste.ui.bank.BankState as State
 
-class PaymentMethodViewModel(
+class BankViewModel(
         val payment: Payment,
         private val repository: PaymentRepository
 ) : BaseViewModel() {
 
     private val loadingState = MutableLiveData<State>()
-    @VisibleForTesting val buttonState = MutableLiveData<State>()
-    @VisibleForTesting val listState = MutableLiveData<State>()
+    private val buttonState = MutableLiveData<State>()
+    private val listState = MutableLiveData<State>()
 
     val state: MediatorLiveData<State>
         get() = MediatorLiveData<State>().apply {
@@ -26,41 +28,43 @@ class PaymentMethodViewModel(
             addSource(listState)
         }
 
-    val paymentMethodList = mutableListOf<PaymentMethod>()
+    val bankList = mutableListOf<Bank>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun initialize() {
         if (listState.value == null) {
-            requestPaymentMethods()
+            requestBanks()
         }
         if (buttonState.value == null) {
             disableNextButton()
         }
     }
 
-    fun requestPaymentMethods() {
-        runJob {
-            showLoading()
-            try {
-                paymentMethodList.apply {
-                    clear()
-                    addAll(repository.creditCardPaymentMethods())
+    fun requestBanks() {
+        payment.paymentMethod?.id?.let { paymentMethodId ->
+            runJob {
+                showLoading()
+                try {
+                    bankList.apply {
+                        clear()
+                        addAll(repository.banks(paymentMethodId))
+                    }
+                    if (bankList.isNotEmpty()) {
+                        showPaymentMethods()
+                    } else {
+                        showEmpty()
+                    }
+                } catch (e: RequestException) {
+                    showError()
                 }
-                if (paymentMethodList.isNotEmpty()) {
-                    showPaymentMethods()
-                } else {
-                    showEmpty()
-                }
-            } catch (e: RequestException) {
-                showError()
+                hideLoading()
             }
-            hideLoading()
-        }
+        } ?: throw IllegalStateException()
     }
 
-    fun setPaymentMethod(id: String) {
-        val method = paymentMethodList.find { it.id == id }
-        payment.paymentMethod = method
+    fun setBank(id: String) {
+        val bank = bankList.find { it.id == id }
+        payment.bank = bank
         enableNextButton()
     }
 
@@ -85,24 +89,26 @@ class PaymentMethodViewModel(
     }
 
     private fun showPaymentMethods() {
-        listState.postValue(State.Received.PaymentMethods(paymentMethodList))
+        listState.postValue(State.Received.Banks(bankList))
     }
 
     private fun showError() {
         listState.postValue(State.Received.Error())
     }
+
 }
 
-sealed class PaymentMethodState {
-
+sealed class BankState {
     data class Loading(val loading: Boolean) : State()
 
     sealed class Changes : State() {
         data class NextButton(val enable: Boolean) : Changes()
     }
 
+
+
     sealed class Received : State() {
-        data class PaymentMethods(val list: List<PaymentMethod>) : Received()
+        data class Banks(val list: List<Bank>) : Received()
         class Empty : Received()
         class Error : Received()
     }

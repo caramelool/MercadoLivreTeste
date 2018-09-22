@@ -7,6 +7,7 @@ import android.os.Bundle
 import caramelo.com.br.mercadolivreteste.R
 import caramelo.com.br.mercadolivreteste.extension.CurrentMaskListener
 import caramelo.com.br.mercadolivreteste.extension.addCurrentMask
+import caramelo.com.br.mercadolivreteste.ui.value.ValueState as State
 import caramelo.com.br.mercadolivreteste.ui.base.BaseActivity
 import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodActivity
 import dagger.android.AndroidInjection
@@ -35,12 +36,12 @@ class ValueActivity : BaseActivity(), CurrentMaskListener {
         valueEditText.addCurrentMask(this)
 
         nextButton.setOnClickListener {
-            openPaymentMethod()
+            goToPaymentMethod()
         }
 
         viewModel.state.observe(this, Observer { state ->
             when(state) {
-                is ValueState.Changes -> handlerChanges(state)
+                is State.Changes -> handlerChanges(state)
             }
         })
 
@@ -51,15 +52,15 @@ class ValueActivity : BaseActivity(), CurrentMaskListener {
         viewModel.value = value
     }
 
-    private fun handlerChanges(state: ValueState.Changes) {
+    private fun handlerChanges(state: State.Changes) {
         when(state) {
-            is ValueState.Changes.NextButton -> {
+            is State.Changes.NextButton -> {
                 nextButton.isEnabled = state.enable
             }
         }
     }
 
-    private fun openPaymentMethod() {
+    private fun goToPaymentMethod() {
         val intent = PaymentMethodActivity.getIntent(
                 this, viewModel.payment)
         startActivity(intent)

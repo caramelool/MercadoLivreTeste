@@ -1,4 +1,4 @@
-package caramelo.com.br.mercadolivreteste.ui.payment
+package caramelo.com.br.mercadolivreteste.ui.bank
 
 import android.app.Activity
 import android.arch.lifecycle.ViewModelProviders
@@ -9,21 +9,22 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class PaymentMethodModule {
+class BankModule {
 
     @Provides
-    fun provideActivity(activity: PaymentMethodActivity): Activity {
-        return activity
+    fun provideActivity(bankActivity: BankActivity): Activity {
+        return bankActivity
     }
 
     @Provides
     fun provideViewHolder(
-            activity: PaymentMethodActivity,
+            activity: BankActivity,
             payment: Payment,
             repository: PaymentRepository
-    ): PaymentMethodViewModel {
+    ): BankViewModel {
         return ViewModelProviders.of(activity, Factory {
-            PaymentMethodViewModel(payment, repository)
-        })[PaymentMethodViewModel::class.java]
+            BankViewModel(payment, repository)
+        })[BankViewModel::class.java]
     }
+
 }

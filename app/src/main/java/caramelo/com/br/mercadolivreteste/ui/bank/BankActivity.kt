@@ -1,4 +1,4 @@
-package caramelo.com.br.mercadolivreteste.ui.payment
+package caramelo.com.br.mercadolivreteste.ui.bank
 
 import android.arch.lifecycle.Observer
 import android.content.Context
@@ -8,28 +8,28 @@ import android.view.View
 import caramelo.com.br.mercadolivreteste.R
 import caramelo.com.br.mercadolivreteste.model.EXTRA_PAYMENT
 import caramelo.com.br.mercadolivreteste.model.Payment
-import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodState as State
-import caramelo.com.br.mercadolivreteste.ui.bank.BankActivity
+import caramelo.com.br.mercadolivreteste.ui.bank.BankState as State
 import caramelo.com.br.mercadolivreteste.ui.base.BaseActivity
 import caramelo.com.br.mercadolivreteste.ui.base.ItemAdapter
 import caramelo.com.br.mercadolivreteste.ui.base.ItemData
 import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.activity_payment_method.*
-import kotlinx.android.synthetic.main.content_payment_method.*
+
+import kotlinx.android.synthetic.main.activity_bank.*
+import kotlinx.android.synthetic.main.content_bank.*
 import kotlinx.android.synthetic.main.view_empty.*
 import kotlinx.android.synthetic.main.view_empty.view.*
 import javax.inject.Inject
 
-class PaymentMethodActivity : BaseActivity() {
+class BankActivity : BaseActivity() {
 
     @Inject
-    lateinit var viewModel: PaymentMethodViewModel
+    lateinit var viewModel: BankViewModel
 
-    private val adapter by lazy { ItemAdapter(R.drawable.ic_payment_method_placeholder, ::onItemSelected) }
+    private val adapter by lazy { ItemAdapter(R.drawable.ic_bank_placeholder, ::onItemSelected) }
 
     companion object {
         fun getIntent(context: Context, payment: Payment): Intent {
-            return Intent(context, PaymentMethodActivity::class.java)
+            return Intent(context, BankActivity::class.java)
                     .putExtra(EXTRA_PAYMENT, payment)
         }
     }
@@ -37,18 +37,14 @@ class PaymentMethodActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AndroidInjection.inject(this)
-        setContentView(R.layout.activity_payment_method)
+        setContentView(R.layout.activity_bank)
         setSupportActionBar(toolbar, true)
 
-        paymentMethodRecyclerView.adapter = adapter
-        paymentMethodRecyclerView.setHasFixedSize(true)
-
-        nextButton.setOnClickListener {
-            goToBank()
-        }
+        bankRecyclerView.adapter = adapter
+        bankRecyclerView.setHasFixedSize(true)
 
         viewModel.state.observe(this, Observer { state ->
-            when (state) {
+            when(state) {
                 is State.Loading -> handlerLoading(state)
                 is State.Changes -> handlerChanges(state)
                 is State.Received -> handlerReceived(state)
@@ -59,7 +55,7 @@ class PaymentMethodActivity : BaseActivity() {
     }
 
     private fun handlerChanges(state: State.Changes) {
-        when (state) {
+        when(state) {
             is State.Changes.NextButton -> {
                 nextButton.isEnabled = state.enable
             }
@@ -75,11 +71,11 @@ class PaymentMethodActivity : BaseActivity() {
     }
 
     private fun handlerReceived(state: State.Received) {
-        when (state) {
-            is State.Received.PaymentMethods -> {
+        when(state) {
+            is State.Received.Banks -> {
                 val data = state.list.map {
                     ItemData(it.id, it.name, it.thumbnail,
-                            it == viewModel.payment.paymentMethod)
+                            it == viewModel.payment.bank)
                 }
                 adapter.data = data
             }
@@ -91,11 +87,11 @@ class PaymentMethodActivity : BaseActivity() {
     private fun handlerError() {
         nextButton.visibility = View.GONE
         emptyView.visibility = View.VISIBLE
-        emptyView.emptyText.setText(R.string.payment_method_list_empty_message)
+        emptyView.emptyText.setText(R.string.bank_list_empty_message)
     }
 
     private fun onItemSelected(id: String) {
-        viewModel.setPaymentMethod(id)
+        viewModel.setBank(id)
     }
 
     private fun goToBank() {

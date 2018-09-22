@@ -29,7 +29,11 @@
         <activity
             android:name=".ui.payment.PaymentMethodActivity"
             android:label="@string/title_activity_payment_method"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ui.bank.BankActivity"
+            android:label="@string/title_activity_bank"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>

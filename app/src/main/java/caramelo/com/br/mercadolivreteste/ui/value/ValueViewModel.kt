@@ -7,12 +7,13 @@ import android.arch.lifecycle.OnLifecycleEvent
 import caramelo.com.br.mercadolivreteste.extension.addSource
 import caramelo.com.br.mercadolivreteste.model.Payment
 import caramelo.com.br.mercadolivreteste.ui.base.BaseViewModel
+import caramelo.com.br.mercadolivreteste.ui.value.ValueState as State
 
 class ValueViewModel : BaseViewModel() {
 
-    private val buttonState = MutableLiveData<ValueState>()
+    private val buttonState = MutableLiveData<State>()
 
-    val state = MediatorLiveData<ValueState>().apply {
+    val state = MediatorLiveData<State>().apply {
         addSource(buttonState)
     }
 
@@ -37,16 +38,16 @@ class ValueViewModel : BaseViewModel() {
     }
 
     private fun enableNextButton() {
-        buttonState.postValue(ValueState.Changes.NextButton(true))
+        buttonState.postValue(State.Changes.NextButton(true))
     }
 
     private fun disableNextButton() {
-        buttonState.postValue(ValueState.Changes.NextButton(false))
+        buttonState.postValue(State.Changes.NextButton(false))
     }
 }
 
 sealed class ValueState {
-    sealed class Changes : ValueState() {
+    sealed class Changes : State() {
         data class NextButton(val enable: Boolean) : Changes()
     }
 }
