@@ -38,16 +38,16 @@ class ValueViewModel : BaseViewModel() {
     }
 
     private fun enableNextButton() {
-        buttonState.postValue(State.Changes.NextButton(true))
+        buttonState.postValue(State.Layout.NextButton(true))
     }
 
     private fun disableNextButton() {
-        buttonState.postValue(State.Changes.NextButton(false))
+        buttonState.postValue(State.Layout.NextButton(false))
     }
 }
 
 sealed class ValueState {
-    sealed class Changes : State() {
-        data class NextButton(val enable: Boolean) : Changes()
+    sealed class Layout : State() {
+        data class NextButton(val enable: Boolean) : Layout()
     }
 }

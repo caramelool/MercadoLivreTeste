@@ -43,10 +43,13 @@ class BankActivity : BaseActivity() {
         bankRecyclerView.adapter = adapter
         bankRecyclerView.setHasFixedSize(true)
 
+        nextButton.setOnClickListener {
+            goToInstallment()
+        }
+
         viewModel.state.observe(this, Observer { state ->
             when(state) {
-                is State.Loading -> handlerLoading(state)
-                is State.Changes -> handlerChanges(state)
+                is State.Layout -> handlerLayout(state)
                 is State.Received -> handlerReceived(state)
             }
         })
@@ -54,20 +57,20 @@ class BankActivity : BaseActivity() {
         lifecycle.addObserver(viewModel)
     }
 
-    private fun handlerChanges(state: State.Changes) {
+    private fun handlerLayout(state: State.Layout) {
         when(state) {
-            is State.Changes.NextButton -> {
+            is State.Layout.Loading -> {
+                loading.visibility = if (state.loading) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+            }
+            is State.Layout.NextButton -> {
                 nextButton.isEnabled = state.enable
             }
         }
-    }
 
-    private fun handlerLoading(state: State.Loading) {
-        loading.visibility = if (state.loading) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
     }
 
     private fun handlerReceived(state: State.Received) {
@@ -75,7 +78,7 @@ class BankActivity : BaseActivity() {
             is State.Received.Banks -> {
                 val data = state.list.map {
                     ItemData(it.id, it.name, it.thumbnail,
-                            it == viewModel.payment.bank)
+                            it.id == viewModel.payment.bankId)
                 }
                 adapter.data = data
             }
@@ -94,7 +97,7 @@ class BankActivity : BaseActivity() {
         viewModel.setBank(id)
     }
 
-    private fun goToBank() {
+    private fun goToInstallment() {
         val intent = BankActivity.getIntent(this, viewModel.payment)
         startActivity(intent)
     }

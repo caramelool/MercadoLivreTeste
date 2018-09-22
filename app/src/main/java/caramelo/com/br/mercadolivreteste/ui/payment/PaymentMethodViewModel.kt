@@ -26,7 +26,7 @@ class PaymentMethodViewModel(
             addSource(listState)
         }
 
-    val paymentMethodList = mutableListOf<PaymentMethod>()
+    private var paymentMethodList = listOf<PaymentMethod>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun initialize() {
@@ -42,10 +42,7 @@ class PaymentMethodViewModel(
         runJob {
             showLoading()
             try {
-                paymentMethodList.apply {
-                    clear()
-                    addAll(repository.creditCardPaymentMethods())
-                }
+                paymentMethodList = repository.creditCardPaymentMethods()
                 if (paymentMethodList.isNotEmpty()) {
                     showPaymentMethods()
                 } else {
@@ -59,25 +56,24 @@ class PaymentMethodViewModel(
     }
 
     fun setPaymentMethod(id: String) {
-        val method = paymentMethodList.find { it.id == id }
-        payment.paymentMethod = method
+        payment.methodId = id
         enableNextButton()
     }
 
     private fun showLoading() {
-        loadingState.postValue(State.Loading(true))
+        loadingState.postValue(State.Layout.Loading(true))
     }
 
     private fun hideLoading() {
-        loadingState.postValue(State.Loading(false))
+        loadingState.postValue(State.Layout.Loading(false))
     }
 
     private fun enableNextButton() {
-        buttonState.postValue(State.Changes.NextButton(true))
+        buttonState.postValue(State.Layout.NextButton(true))
     }
 
     private fun disableNextButton() {
-        buttonState.postValue(State.Changes.NextButton(false))
+        buttonState.postValue(State.Layout.NextButton(false))
     }
 
     private fun showEmpty() {
@@ -95,10 +91,9 @@ class PaymentMethodViewModel(
 
 sealed class PaymentMethodState {
 
-    data class Loading(val loading: Boolean) : State()
-
-    sealed class Changes : State() {
-        data class NextButton(val enable: Boolean) : Changes()
+    sealed class Layout : State() {
+        data class Loading(val loading: Boolean) : Layout()
+        data class NextButton(val enable: Boolean) : Layout()
     }
 
     sealed class Received : State() {

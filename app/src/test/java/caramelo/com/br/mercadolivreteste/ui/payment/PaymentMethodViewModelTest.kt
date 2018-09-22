@@ -17,8 +17,7 @@ import org.mockito.Mockito.*
 
 class PaymentMethodViewModelTest : BaseUnitTest() {
 
-    @Mock
-    private lateinit var payment: Payment
+    private val payment = Payment()
 
     @Mock
     private lateinit var repository: PaymentRepository
@@ -49,7 +48,7 @@ class PaymentMethodViewModelTest : BaseUnitTest() {
         viewModel.initialize()
 
         val argumentCaptor = ArgumentCaptor.forClass(PaymentMethodState::class.java)
-        val expectedButtonState = PaymentMethodState.Changes.NextButton(false)
+        val expectedButtonState = PaymentMethodState.Layout.NextButton(false)
 
         argumentCaptor.run {
             verify(observerState, times(1)).onChanged(capture())
@@ -62,7 +61,7 @@ class PaymentMethodViewModelTest : BaseUnitTest() {
     @Test
     fun `when activity created and have a state should not disable the next button and not request payment methods`() {
 
-        viewModel.buttonState.value = PaymentMethodState.Changes.NextButton(false)
+        viewModel.buttonState.value = PaymentMethodState.Layout.NextButton(false)
         viewModel.listState.value = PaymentMethodState.Received.PaymentMethods(paymentMethodListMock)
 
         viewModel.initialize()
@@ -83,9 +82,9 @@ class PaymentMethodViewModelTest : BaseUnitTest() {
         viewModel.requestPaymentMethods()
 
         val argumentCaptor = ArgumentCaptor.forClass(PaymentMethodState::class.java)
-        val expectedShowLoadingState = PaymentMethodState.Loading(true)
+        val expectedShowLoadingState = PaymentMethodState.Layout.Loading(true)
         val expectedReceivedState = PaymentMethodState.Received.Empty()
-        val expectedHideLoadingState = PaymentMethodState.Loading(false)
+        val expectedHideLoadingState = PaymentMethodState.Layout.Loading(false)
 
         argumentCaptor.run {
             verify(observerState, times(3)).onChanged(capture())
@@ -104,9 +103,9 @@ class PaymentMethodViewModelTest : BaseUnitTest() {
         viewModel.requestPaymentMethods()
 
         val argumentCaptor = ArgumentCaptor.forClass(PaymentMethodState::class.java)
-        val expectedShowLoadingState = PaymentMethodState.Loading(true)
+        val expectedShowLoadingState = PaymentMethodState.Layout.Loading(true)
         val expectedReceivedState = PaymentMethodState.Received.PaymentMethods(paymentMethodListMock)
-        val expectedHideLoadingState = PaymentMethodState.Loading(false)
+        val expectedHideLoadingState = PaymentMethodState.Layout.Loading(false)
 
         argumentCaptor.run {
             verify(observerState, times(3)).onChanged(capture())
@@ -125,9 +124,9 @@ class PaymentMethodViewModelTest : BaseUnitTest() {
         viewModel.requestPaymentMethods()
 
         val argumentCaptor = ArgumentCaptor.forClass(PaymentMethodState::class.java)
-        val expectedShowLoadingState = PaymentMethodState.Loading(true)
+        val expectedShowLoadingState = PaymentMethodState.Layout.Loading(true)
         val expectedReceivedState = PaymentMethodState.Received.Error()
-        val expectedHideLoadingState = PaymentMethodState.Loading(false)
+        val expectedHideLoadingState = PaymentMethodState.Layout.Loading(false)
 
         argumentCaptor.run {
             verify(observerState, times(3)).onChanged(capture())
@@ -140,20 +139,15 @@ class PaymentMethodViewModelTest : BaseUnitTest() {
 
     @Test
     fun `verify when set payment method in payment class`() {
-
-        viewModel.paymentMethodList.apply {
-            clear()
-            addAll(paymentMethodListMock)
-        }
-
         viewModel.setPaymentMethod("2")
 
         val argumentCaptor = ArgumentCaptor.forClass(PaymentMethodState::class.java)
-        val expectedButtonState = PaymentMethodState.Changes.NextButton(true)
+        val expectedButtonState = PaymentMethodState.Layout.NextButton(true)
 
         argumentCaptor.run {
             verify(observerState, times(1)).onChanged(capture())
             val (buttonState) = allValues
+            assertEquals(payment.methodId, "2")
             assertEquals(buttonState, expectedButtonState)
         }
     }

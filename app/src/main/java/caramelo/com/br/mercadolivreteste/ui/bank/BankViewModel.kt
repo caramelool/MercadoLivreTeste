@@ -28,7 +28,7 @@ class BankViewModel(
             addSource(listState)
         }
 
-    val bankList = mutableListOf<Bank>()
+    private var bankList = listOf<Bank>()
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun initialize() {
@@ -41,47 +41,41 @@ class BankViewModel(
     }
 
     fun requestBanks() {
-        payment.paymentMethod?.id?.let { paymentMethodId ->
-            runJob {
-                showLoading()
-                try {
-                    bankList.apply {
-                        clear()
-                        addAll(repository.banks(paymentMethodId))
-                    }
-                    if (bankList.isNotEmpty()) {
-                        showPaymentMethods()
-                    } else {
-                        showEmpty()
-                    }
-                } catch (e: RequestException) {
-                    showError()
+        runJob {
+            showLoading()
+            try {
+                bankList = repository.banks(payment.methodId)
+                if (bankList.isNotEmpty()) {
+                    showPaymentMethods()
+                } else {
+                    showEmpty()
                 }
-                hideLoading()
+            } catch (e: RequestException) {
+                showError()
             }
-        } ?: throw IllegalStateException()
+            hideLoading()
+        }
     }
 
     fun setBank(id: String) {
-        val bank = bankList.find { it.id == id }
-        payment.bank = bank
+        payment.bankId = id
         enableNextButton()
     }
 
     private fun showLoading() {
-        loadingState.postValue(State.Loading(true))
+        loadingState.postValue(State.Layout.Loading(true))
     }
 
     private fun hideLoading() {
-        loadingState.postValue(State.Loading(false))
+        loadingState.postValue(State.Layout.Loading(false))
     }
 
     private fun enableNextButton() {
-        buttonState.postValue(State.Changes.NextButton(true))
+        buttonState.postValue(State.Layout.NextButton(true))
     }
 
     private fun disableNextButton() {
-        buttonState.postValue(State.Changes.NextButton(false))
+        buttonState.postValue(State.Layout.NextButton(false))
     }
 
     private fun showEmpty() {
@@ -99,13 +93,11 @@ class BankViewModel(
 }
 
 sealed class BankState {
-    data class Loading(val loading: Boolean) : State()
 
-    sealed class Changes : State() {
-        data class NextButton(val enable: Boolean) : Changes()
+    sealed class Layout : State() {
+        data class Loading(val loading: Boolean) : Layout()
+        data class NextButton(val enable: Boolean) : Layout()
     }
-
-
 
     sealed class Received : State() {
         data class Banks(val list: List<Bank>) : Received()

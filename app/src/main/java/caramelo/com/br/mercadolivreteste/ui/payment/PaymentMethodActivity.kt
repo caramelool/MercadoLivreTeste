@@ -49,8 +49,7 @@ class PaymentMethodActivity : BaseActivity() {
 
         viewModel.state.observe(this, Observer { state ->
             when (state) {
-                is State.Loading -> handlerLoading(state)
-                is State.Changes -> handlerChanges(state)
+                is State.Layout -> handlerLayout(state)
                 is State.Received -> handlerReceived(state)
             }
         })
@@ -58,20 +57,20 @@ class PaymentMethodActivity : BaseActivity() {
         lifecycle.addObserver(viewModel)
     }
 
-    private fun handlerChanges(state: State.Changes) {
-        when (state) {
-            is State.Changes.NextButton -> {
+    private fun handlerLayout(state: State.Layout) {
+        when(state) {
+            is State.Layout.Loading -> {
+                loading.visibility = if (state.loading) {
+                    View.VISIBLE
+                } else {
+                    View.GONE
+                }
+            }
+            is State.Layout.NextButton -> {
                 nextButton.isEnabled = state.enable
             }
         }
-    }
 
-    private fun handlerLoading(state: State.Loading) {
-        loading.visibility = if (state.loading) {
-            View.VISIBLE
-        } else {
-            View.GONE
-        }
     }
 
     private fun handlerReceived(state: State.Received) {
@@ -79,7 +78,7 @@ class PaymentMethodActivity : BaseActivity() {
             is State.Received.PaymentMethods -> {
                 val data = state.list.map {
                     ItemData(it.id, it.name, it.thumbnail,
-                            it == viewModel.payment.paymentMethod)
+                            it.id == viewModel.payment.methodId)
                 }
                 adapter.data = data
             }

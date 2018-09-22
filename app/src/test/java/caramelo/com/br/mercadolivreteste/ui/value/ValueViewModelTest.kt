@@ -28,7 +28,7 @@ class ValueViewModelTest : BaseUnitTest() {
         viewModel.value = 100f
 
         val argumentCaptor = ArgumentCaptor.forClass(ValueState::class.java)
-        val expectedState = ValueState.Changes.NextButton(true)
+        val expectedState = ValueState.Layout.NextButton(true)
 
         argumentCaptor.run {
             verify(observerState, times(1)).onChanged(capture())
@@ -42,7 +42,7 @@ class ValueViewModelTest : BaseUnitTest() {
         viewModel.value = 0f
 
         val argumentCaptor = ArgumentCaptor.forClass(ValueState::class.java)
-        val expectedState = ValueState.Changes.NextButton(false)
+        val expectedState = ValueState.Layout.NextButton(false)
 
         argumentCaptor.run {
             verify(observerState, times(1)).onChanged(capture())

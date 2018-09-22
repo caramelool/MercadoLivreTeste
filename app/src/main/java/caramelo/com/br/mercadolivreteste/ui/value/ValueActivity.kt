@@ -41,7 +41,7 @@ class ValueActivity : BaseActivity(), CurrentMaskListener {
 
         viewModel.state.observe(this, Observer { state ->
             when(state) {
-                is State.Changes -> handlerChanges(state)
+                is State.Layout -> handlerLayout(state)
             }
         })
 
@@ -52,9 +52,9 @@ class ValueActivity : BaseActivity(), CurrentMaskListener {
         viewModel.value = value
     }
 
-    private fun handlerChanges(state: State.Changes) {
+    private fun handlerLayout(state: State.Layout) {
         when(state) {
-            is State.Changes.NextButton -> {
+            is State.Layout.NextButton -> {
                 nextButton.isEnabled = state.enable
             }
         }

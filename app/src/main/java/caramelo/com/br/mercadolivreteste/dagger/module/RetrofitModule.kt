@@ -1,5 +1,6 @@
 package caramelo.com.br.mercadolivreteste.dagger.module
 
+import caramelo.com.br.mercadolivreteste.BuildConfig
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.experimental.CoroutineCallAdapterFactory
 import dagger.Module
 import dagger.Provides
@@ -8,6 +9,9 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
+import okhttp3.HttpUrl
+
+
 
 @Module
 class RetrofitModule {
@@ -31,16 +35,18 @@ class RetrofitModule {
         return OkHttpClient.Builder()
                 .addInterceptor(logging)
                 .addInterceptor { chain ->
-
                     val original = chain.request()
+                    val originalHttpUrl = original.url()
+
+                    val url = originalHttpUrl.newBuilder()
+                            .addQueryParameter("public_key", BuildConfig.PUBLIC_KEY)
+                            .build()
 
                     val requestBuilder = original.newBuilder()
-
-                    /** will be nice the public_key send in header  **/
-//                    requestBuilder.addHeader("Authorization", "JWT {public_key}")
+                            .url(url)
 
                     val request = requestBuilder.build()
-                    chain.proceed(request)
+                    return@addInterceptor chain.proceed(request)
 
                 }
                 .build()
