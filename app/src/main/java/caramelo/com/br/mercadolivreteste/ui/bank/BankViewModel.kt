@@ -4,6 +4,7 @@ import android.arch.lifecycle.Lifecycle
 import android.arch.lifecycle.MediatorLiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.OnLifecycleEvent
+import android.support.annotation.VisibleForTesting
 import caramelo.com.br.mercadolivreteste.extension.RequestException
 import caramelo.com.br.mercadolivreteste.extension.addSource
 import caramelo.com.br.mercadolivreteste.model.Bank
@@ -18,8 +19,8 @@ class BankViewModel(
 ) : BaseViewModel() {
 
     private val loadingState = MutableLiveData<State>()
-    private val buttonState = MutableLiveData<State>()
-    private val listState = MutableLiveData<State>()
+    @VisibleForTesting val buttonState = MutableLiveData<State>()
+    @VisibleForTesting val listState = MutableLiveData<State>()
 
     val state: MediatorLiveData<State>
         get() = MediatorLiveData<State>().apply {
