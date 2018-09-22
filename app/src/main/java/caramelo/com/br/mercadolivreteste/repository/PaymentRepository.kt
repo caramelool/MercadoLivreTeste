@@ -32,7 +32,7 @@ class PaymentRepository @Inject constructor(
         return if (list.isNotEmpty()) {
             list[0]
         } else {
-            throw RequestException("installment list cannot be null or empty")
+            throw RequestException("installment not found")
         }
     }
 
