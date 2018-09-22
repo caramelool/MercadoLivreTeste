@@ -17,5 +17,5 @@ interface PaymentApi {
     @GET("v1/payment_methods/installments")
     fun installments(@Query("amount") amount: Float,
                      @Query("payment_method_id") paymentMethodId: String,
-                     @Query("issuer.id") bankId: String): Deferred<Installment>
+                     @Query("issuer.id") bankId: String): Deferred<List<Installment>>
 }

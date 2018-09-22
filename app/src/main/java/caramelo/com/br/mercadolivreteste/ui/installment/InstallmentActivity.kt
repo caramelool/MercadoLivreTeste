@@ -14,6 +14,8 @@ import dagger.android.AndroidInjection
 
 import kotlinx.android.synthetic.main.activity_installment.*
 import kotlinx.android.synthetic.main.content_installment.*
+import kotlinx.android.synthetic.main.view_empty.*
+import kotlinx.android.synthetic.main.view_empty.view.*
 import javax.inject.Inject
 
 class InstallmentActivity : BaseActivity() {
@@ -40,6 +42,8 @@ class InstallmentActivity : BaseActivity() {
                 is State.Received -> handlerReceived(state)
             }
         })
+
+        lifecycle.addObserver(viewModel)
     }
 
     private fun handlerLayout(state: State.Layout) {
@@ -59,7 +63,19 @@ class InstallmentActivity : BaseActivity() {
     }
 
     private fun handlerReceived(state: State.Received) {
-
+        when(state) {
+            is State.Received.Info -> {
+                installmentRecyclerView.apply {
+                    adapter = InstallmentAdapter(state.installment)
+                    setHasFixedSize(true)
+                }
+            }
+            is State.Received.Error -> {
+                payButton.visibility = View.GONE
+                emptyView.visibility = View.VISIBLE
+                emptyView.emptyText.setText(R.string.installment_error_message)
+            }
+        }
     }
 
 }

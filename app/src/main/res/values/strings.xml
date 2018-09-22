@@ -7,6 +7,7 @@
 
     <string name="payment_method_list_empty_message">Payment method list not found</string>
     <string name="bank_list_empty_message">Bank list not found</string>
+    <string name="installment_error_message">Could not find the payment info</string>
 
     <string name="title_activity_amount">Mercado Livre</string>
     <string name="title_activity_payment_method">Select Payment Method</string>

@@ -19,13 +19,13 @@ class InstallmentViewModel(
     private val loadingState = MutableLiveData<State>()
     private val payButtonState = MutableLiveData<State>()
     private val amountTextState = MutableLiveData<State>()
-    private val listState = MutableLiveData<State>()
+    private val installmentState = MutableLiveData<State>()
 
     val state = MediatorLiveData<State>().apply {
         addSource(loadingState)
         addSource(payButtonState)
         addSource(amountTextState)
-        addSource(listState)
+        addSource(installmentState)
     }
 
     private lateinit var installment: Installment
@@ -36,7 +36,7 @@ class InstallmentViewModel(
             disablePayButton()
         }
 
-        if (listState.value == null) {
+        if (installmentState.value == null) {
             requestInstallment()
         }
     }
@@ -46,6 +46,7 @@ class InstallmentViewModel(
             showLoading()
             try {
                 installment = repository.installment(payment)
+                showInfo()
                 if (installment.payerCosts.isEmpty()) {
                     showEmpty()
                 }
@@ -72,12 +73,16 @@ class InstallmentViewModel(
         payButtonState.postValue(State.Layout.PayButton(false))
     }
 
+    private fun showInfo() {
+        installmentState.postValue(State.Received.Info(installment))
+    }
+
     private fun showEmpty() {
-        listState.postValue(State.Received.Empty)
+        installmentState.postValue(State.Received.Empty)
     }
 
     private fun showError() {
-        listState.postValue(State.Received.Error)
+        installmentState.postValue(State.Received.Error)
     }
 
     sealed class State {
@@ -88,6 +93,7 @@ class InstallmentViewModel(
         }
 
         sealed class Received : State() {
+            data class Info(val installment: Installment): Received()
             object Empty : Received()
             object Error : Received()
         }

@@ -16,22 +16,20 @@ class AmountViewModel : BaseViewModel() {
         addSource(buttonState)
     }
 
-    var amount: Float = 0f
-        set(value) {
-            field = value
-            if (field > 0f) {
-                enableNextButton()
-            } else {
-                disableNextButton()
-            }
-        }
-
-    val payment: Payment
-        get() = Payment(amount)
+    val payment by lazy { Payment() }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     private fun initState() {
         if (buttonState.value == null) {
+            disableNextButton()
+        }
+    }
+
+    fun setAmount(amount: Float) {
+        payment.amount = amount
+        if (amount > 0f) {
+            enableNextButton()
+        } else {
             disableNextButton()
         }
     }

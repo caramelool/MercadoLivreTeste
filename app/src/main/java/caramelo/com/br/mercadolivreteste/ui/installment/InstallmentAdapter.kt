@@ -24,12 +24,12 @@ class InstallmentAdapter(
         ))
 
         installment.payerCosts
-                .sortedByDescending { it.installments }
-                .sortedBy { it.labels.contains("recommended_installment") }
+                .sortedByDescending { it.labels.contains("recommended_installment") }
                 .forEach {
                     add(Data.Installment(
                             it.installments,
                             it.recommendedMessage,
+                            it.labels.contains("recommended_installment"),
                             it.labels.contains("recommended_installment")
                     ))
                 }

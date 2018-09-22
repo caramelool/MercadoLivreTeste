@@ -5,6 +5,7 @@ import android.support.annotation.DrawableRes
 import caramelo.com.br.mercadolivreteste.R
 import android.support.v7.widget.RecyclerView
 import android.view.ViewGroup
+import caramelo.com.br.mercadolivreteste.extension.loadGif
 import caramelo.com.br.mercadolivreteste.extension.loadImage
 import kotlinx.android.parcel.Parcelize
 import kotlinx.android.synthetic.main.adapter_item.view.*
@@ -38,7 +39,7 @@ class ItemAdapter(
         fun bind(item: ItemData) {
             with(itemView) {
                 itemText.text = item.name
-                itemImage.loadImage(item.thumbnail, placeholder)
+                itemImage.loadGif(item.thumbnail, placeholder)
                 itemRadio.isChecked = item.selected
 
                 setOnClickListener {

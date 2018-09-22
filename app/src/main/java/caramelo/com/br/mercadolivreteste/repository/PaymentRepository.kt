@@ -25,10 +25,15 @@ class PaymentRepository @Inject constructor(
 
     @Throws(RequestException::class)
     suspend fun installment(payment: Payment): Installment {
-        return api.installments(
+        val list = api.installments(
                 payment.amount,
                 payment.methodId,
                 payment.bankId).request()
+        return if (list.isNotEmpty()) {
+            list[0]
+        } else {
+            throw RequestException("installment list cannot be null or empty")
+        }
     }
 
 }

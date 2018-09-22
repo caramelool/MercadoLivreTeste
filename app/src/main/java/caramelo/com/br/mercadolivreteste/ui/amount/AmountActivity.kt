@@ -49,7 +49,7 @@ class AmountActivity : BaseActivity(), CurrentMaskListener {
     }
 
     override fun onValueChange(value: Float) {
-        viewModel.amount = value
+        viewModel.setAmount(value)
     }
 
     private fun handlerLayout(state: State.Layout) {
