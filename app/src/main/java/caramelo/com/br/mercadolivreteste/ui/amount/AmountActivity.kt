@@ -28,6 +28,7 @@ class AmountActivity : BaseActivity(), CurrentMaskListener {
     companion object {
         fun getIntent(context: Context): Intent {
             return Intent(context, AmountActivity::class.java)
+                    .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
         }
     }
 

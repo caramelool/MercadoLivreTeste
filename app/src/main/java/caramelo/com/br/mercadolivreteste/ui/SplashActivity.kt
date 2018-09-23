@@ -23,6 +23,5 @@ class SplashActivity : BaseActivity() {
     private fun openAmount() {
         val intent = AmountActivity.getIntent(this)
         startActivity(intent)
-        finish()
     }
 }

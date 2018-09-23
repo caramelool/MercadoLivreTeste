@@ -9,9 +9,11 @@ import caramelo.com.br.mercadolivreteste.R
 import caramelo.com.br.mercadolivreteste.extension.bind
 import caramelo.com.br.mercadolivreteste.extension.loadGif
 import caramelo.com.br.mercadolivreteste.model.Installment
+import caramelo.com.br.mercadolivreteste.model.Payment
 import caramelo.com.br.mercadolivreteste.ui.base.BaseViewHolder
 
 class InstallmentAdapter(
+        private val payment: Payment,
         private val onInstallmentsSelected: (Int) -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -35,15 +37,21 @@ class InstallmentAdapter(
                     .sortedByDescending { it.labels.contains("recommended_installment") }
                     .forEach {
                         val isRecommended = it.labels.contains("recommended_installment")
-                        add(Data.Installment(
+                        val item = Data.Installment(
                                 it.installments,
                                 it.recommendedMessage,
-                                isRecommended,
                                 isRecommended
-                        ))
-                        if (isRecommended) {
+                        )
+                        if (payment.instalmments != 0) {
+                            if (payment.instalmments == it.installments) {
+                                item.selected = true
+                                onInstallmentsSelected(it.installments)
+                            }
+                        } else if (isRecommended) {
+                            item.selected = true
                             onInstallmentsSelected(it.installments)
                         }
+                        add(item)
                     }
         }
         notifyDataSetChanged()

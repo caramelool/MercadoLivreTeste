@@ -4,10 +4,12 @@
     <string name="amount_hint">How much you like to pay?</string>
     <string name="button_next">Next</string>
     <string name="button_pay">Pay</string>
+    <string name="recommend">Recommended</string>
 
     <string name="payment_method_list_empty_message">Payment method list not found</string>
     <string name="bank_list_empty_message">Bank list not found</string>
     <string name="installment_error_message">Could not find the payment info</string>
+    <string name="payment_paid_successfully_message">Payment paid successfully!</string>
 
     <string name="title_activity_amount">Mercado Livre</string>
     <string name="title_activity_payment_method">Select Payment Method</string>

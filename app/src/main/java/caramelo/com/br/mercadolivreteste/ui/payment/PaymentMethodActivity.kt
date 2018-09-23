@@ -36,7 +36,6 @@ class PaymentMethodActivity : BaseActivity() {
     companion object {
         fun getIntent(context: Context, payment: Payment): Intent {
             return Intent(context, PaymentMethodActivity::class.java)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(EXTRA_PAYMENT, payment)
         }
     }

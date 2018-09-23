@@ -14,11 +14,17 @@ import caramelo.com.br.mercadolivreteste.R
 import caramelo.com.br.mercadolivreteste.extension.bind
 import caramelo.com.br.mercadolivreteste.model.EXTRA_PAYMENT
 import caramelo.com.br.mercadolivreteste.model.Payment
+import caramelo.com.br.mercadolivreteste.ui.amount.AmountActivity
 import caramelo.com.br.mercadolivreteste.ui.base.BaseActivity
 import caramelo.com.br.mercadolivreteste.ui.installment.InstallmentViewModel.State
 import dagger.android.AndroidInjection
 import kotlinx.android.synthetic.main.view_empty.*
 import kotlinx.android.synthetic.main.view_empty.view.*
+import kotlinx.android.synthetic.main.view_success.*
+import kotlinx.android.synthetic.main.view_success.view.*
+import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.delay
+import kotlinx.coroutines.experimental.launch
 import javax.inject.Inject
 
 class InstallmentActivity : BaseActivity() {
@@ -31,7 +37,7 @@ class InstallmentActivity : BaseActivity() {
     @Inject
     lateinit var viewModel: InstallmentViewModel
 
-    private val adapter by lazy { InstallmentAdapter(::onInstallmentsSelected) }
+    private val adapter by lazy { InstallmentAdapter(viewModel.payment, ::onInstallmentsSelected) }
 
     companion object {
         fun getIntent(context: Context, payment: Payment): Intent {
@@ -53,7 +59,7 @@ class InstallmentActivity : BaseActivity() {
         }
 
         btnPay.setOnClickListener {
-
+            viewModel.pay()
         }
 
         viewModel.state.observe(this, Observer { state ->
@@ -70,8 +76,18 @@ class InstallmentActivity : BaseActivity() {
         when(state) {
             is State.Layout.Loading -> {
                 loading.visibility = if (state.loading) {
+                    with(View.GONE) {
+                        btnPay.visibility = this
+                        recycler.visibility = this
+                        txtInstallment.visibility = this
+                    }
                     View.VISIBLE
                 } else {
+                    with(View.VISIBLE) {
+                        btnPay.visibility = this
+                        recycler.visibility = this
+                        txtInstallment.visibility = this
+                    }
                     View.GONE
                 }
             }
@@ -90,17 +106,39 @@ class InstallmentActivity : BaseActivity() {
             is State.Received.Info -> {
                 adapter.setInstallment(state.installment)
             }
+            is State.Received.Empty,
             is State.Received.Error -> {
                 btnPay.visibility = View.GONE
                 txtInstallment.visibility = View.GONE
-                emptyView.visibility = View.VISIBLE
-                emptyView.emptyText.setText(R.string.installment_error_message)
+                with(emptyView) {
+                    visibility = View.VISIBLE
+                    emptyText.setText(R.string.installment_error_message)
+                }
             }
+            is State.Received.Paid -> showPaidSuccess(state)
+        }
+    }
+
+    private fun showPaidSuccess(state: State.Received.Paid) {
+        launch(UI) {
+            loading.visibility = View.GONE
+            with(successView) {
+                visibility = View.VISIBLE
+                successLottie.playAnimation()
+                successText.setText(R.string.payment_paid_successfully_message)
+            }
+            delay(4000)
+            goToAmount()
         }
     }
 
     private fun onInstallmentsSelected(installments: Int) {
         viewModel.setInstallments(installments)
+    }
+
+    private fun goToAmount() {
+        val intent = AmountActivity.getIntent(this@InstallmentActivity)
+        startActivity(intent)
     }
 
 }

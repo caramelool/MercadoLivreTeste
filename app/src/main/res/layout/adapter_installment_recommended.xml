@@ -11,7 +11,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:fontFamily="@font/lato_bold"
-        android:text="Recommended"
+        android:text="@string/recommend"
         android:textAllCaps="true"
         android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@id/adapter_installment_radio"

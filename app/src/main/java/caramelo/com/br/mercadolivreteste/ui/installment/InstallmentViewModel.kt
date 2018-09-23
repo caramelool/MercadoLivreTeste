@@ -1,15 +1,13 @@
 package caramelo.com.br.mercadolivreteste.ui.installment
 
-import android.arch.lifecycle.Lifecycle
-import android.arch.lifecycle.MediatorLiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.OnLifecycleEvent
+import android.arch.lifecycle.*
 import caramelo.com.br.mercadolivreteste.extension.RequestException
 import caramelo.com.br.mercadolivreteste.extension.addSource
 import caramelo.com.br.mercadolivreteste.model.Installment
 import caramelo.com.br.mercadolivreteste.model.Payment
 import caramelo.com.br.mercadolivreteste.repository.PaymentRepository
 import caramelo.com.br.mercadolivreteste.ui.base.BaseViewModel
+import kotlinx.coroutines.experimental.delay
 
 class InstallmentViewModel(
         val payment: Payment,
@@ -21,12 +19,13 @@ class InstallmentViewModel(
     private val amountTextState = MutableLiveData<State>()
     private val installmentState = MutableLiveData<State>()
 
-    val state = MediatorLiveData<State>().apply {
-        addSource(loadingState)
-        addSource(payButtonState)
-        addSource(amountTextState)
-        addSource(installmentState)
-    }
+    val state: MediatorLiveData<State>
+        get() = MediatorLiveData<State>().apply {
+            addSource(loadingState)
+            addSource(payButtonState)
+            addSource(amountTextState)
+            addSource(installmentState)
+        }
 
     private lateinit var installment: Installment
 
@@ -58,11 +57,19 @@ class InstallmentViewModel(
         installment.payerCosts
                 .find { it.installments == installments }
                 ?.let { item ->
-                    payment.instalmment = item.installments
+                    payment.instalmments = item.installments
                     setInstallmentText(item.recommendedMessage)
                     enablePayButton()
                 }
 
+    }
+
+    fun pay() {
+        runJob {
+            showLoading()
+            delay(3000)
+            showPaid()
+        }
     }
 
     private fun showLoading() {
@@ -97,6 +104,10 @@ class InstallmentViewModel(
         amountTextState.postValue(State.Layout.InstallmentText(message))
     }
 
+    private fun showPaid() {
+        installmentState.postValue(State.Received.Paid)
+    }
+
     sealed class State {
         sealed class Layout : State() {
             data class Loading(val loading: Boolean) : Layout()
@@ -106,6 +117,7 @@ class InstallmentViewModel(
 
         sealed class Received : State() {
             data class Info(val installment: Installment): Received()
+            object Paid : Received()
             object Empty : Received()
             object Error : Received()
         }
