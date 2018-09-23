@@ -46,11 +46,22 @@ class InstallmentViewModel(
             try {
                 installment = repository.installment(payment)
                 showInfo()
+                setRecommendedInstallments()
             } catch (e: RequestException) {
                showError()
             }
             hideLoading()
         }
+    }
+
+    fun setRecommendedInstallments() {
+        installment.payerCosts
+                .find { it.isRecommended() }
+                ?.let { item ->
+                    payment.instalmments = item.installments
+                    setInstallmentText(item.recommendedMessage)
+                    enablePayButton()
+                }
     }
 
     fun setInstallments(installments: Int) {

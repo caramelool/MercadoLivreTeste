@@ -42,18 +42,30 @@ class InstallmentViewModelTest : BaseUnitTest() {
     fun `should show installment info when request installment successfully`() = runBlocking {
         doReturn(installment).whenever(repository).installment(payment)
 
+        val message = installment.payerCosts
+                .asSequence()
+                .filter { it.isRecommended() }
+                .map { it.recommendedMessage }
+                .firstOrNull() ?: throw IllegalStateException("payerCosts not found")
+
         viewModel.requestInstallment()
+
+        verify(viewModel, times(1)).setRecommendedInstallments()
 
         val argumentCaptor = ArgumentCaptor.forClass(State::class.java)
         val expectedShowLoading = State.Layout.Loading(true)
         val expectedInstallment = State.Received.Info(installment)
         val expectedHideLoading = State.Layout.Loading(false)
+        val expectedInstallmentText = State.Layout.InstallmentText(message)
+        val expectedPayButton = State.Layout.PayButton(true)
 
         argumentCaptor.run {
-            verify(observerState, times(3)).onChanged(argumentCaptor.capture())
-            val (showLoading, info, hideLoading) = allValues
+            verify(observerState, times(5)).onChanged(argumentCaptor.capture())
+            val (showLoading, info, installmentText, payButton, hideLoading) = allValues
             assertEquals(showLoading, expectedShowLoading)
             assertEquals(info, expectedInstallment)
+            assertEquals(installmentText, expectedInstallmentText)
+            assertEquals(payButton, expectedPayButton)
             assertEquals(hideLoading, expectedHideLoading)
         }
     }

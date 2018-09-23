@@ -127,7 +127,7 @@ class InstallmentActivity : BaseActivity() {
                 successLottie.playAnimation()
                 successText.setText(R.string.payment_paid_successfully_message)
             }
-            delay(4000)
+            delay(2500)
             goToAmount()
         }
     }

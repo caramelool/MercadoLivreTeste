@@ -27,4 +27,7 @@ data class InstallmentItem(
         @SerializedName("installment_rate") val installmentRate: Float,
         @SerializedName("installment_amount") val installmentAmount: Float,
         @SerializedName("total_amount") val totalAmount: Float
-) : Parcelable
+) : Parcelable {
+
+    fun isRecommended() = labels.contains("recommended_installment")
+}

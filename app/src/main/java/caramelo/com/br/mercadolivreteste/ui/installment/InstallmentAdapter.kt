@@ -34,24 +34,14 @@ class InstallmentAdapter(
             ))
 
             installment.payerCosts
-                    .sortedByDescending { it.labels.contains("recommended_installment") }
+                    .sortedByDescending { it.isRecommended() }
                     .forEach {
-                        val isRecommended = it.labels.contains("recommended_installment")
-                        val item = Data.Installment(
+                        add(Data.Installment(
                                 it.installments,
                                 it.recommendedMessage,
-                                isRecommended
-                        )
-                        if (payment.instalmments != 0) {
-                            if (payment.instalmments == it.installments) {
-                                item.selected = true
-                                onInstallmentsSelected(it.installments)
-                            }
-                        } else if (isRecommended) {
-                            item.selected = true
-                            onInstallmentsSelected(it.installments)
-                        }
-                        add(item)
+                                it.isRecommended(),
+                                payment.instalmments == it.installments
+                        ))
                     }
         }
         notifyDataSetChanged()
@@ -113,7 +103,8 @@ class InstallmentAdapter(
     }
 
     private fun onInstallmentClick(item: InstallmentAdapter.Data.Installment) {
-        data.filter { it is Data.Installment && it.selected }
+        data.asSequence()
+                .filter { it is Data.Installment && it.selected }
                 .map { it as Data.Installment }
                 .forEach {
                     it.selected = false

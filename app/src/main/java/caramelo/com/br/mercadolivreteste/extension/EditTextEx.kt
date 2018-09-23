@@ -4,6 +4,7 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.widget.EditText
 import java.text.DecimalFormat
+import java.util.*
 
 interface CurrentMaskListener {
     fun onValueChange(value: Float)
@@ -12,7 +13,7 @@ interface CurrentMaskListener {
 fun EditText.addCurrentMask(listener: CurrentMaskListener? = null) {
     addTextChangedListener(object : TextWatcher {
 
-        private val formatter by lazy { DecimalFormat.getCurrencyInstance() }
+        private val formatter by lazy { DecimalFormat.getCurrencyInstance(Locale.US) }
 
         override fun afterTextChanged(s: Editable?) {
             //Do nothing
