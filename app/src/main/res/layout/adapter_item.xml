@@ -7,16 +7,17 @@
     android:padding="8dp">
 
     <ImageView
-        android:id="@+id/itemImage"
+        android:id="@+id/adapter_item_image"
         android:layout_width="54dp"
         android:layout_height="54dp"
-        android:contentDescription="image"
+        android:contentDescription="@null"
+        android:scaleType="fitCenter"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         tools:src="@tools:sample/avatars" />
 
     <TextView
-        android:id="@+id/itemText"
+        android:id="@+id/adapter_item_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha=".8"
@@ -24,17 +25,17 @@
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/itemImage"
+        app:layout_constraintTop_toBottomOf="@id/adapter_item_image"
         tools:text="@tools:sample/first_names" />
 
     <RadioButton
-        android:id="@+id/itemRadio"
+        android:id="@+id/adapter_item_radio"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:clickable="false"
         android:text=""
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/itemText" />
+        app:layout_constraintTop_toBottomOf="@id/adapter_item_text" />
 
 </android.support.constraint.ConstraintLayout>

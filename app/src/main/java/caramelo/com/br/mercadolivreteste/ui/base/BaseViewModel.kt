@@ -2,8 +2,11 @@ package caramelo.com.br.mercadolivreteste.ui.base
 
 import android.arch.lifecycle.*
 import android.support.annotation.VisibleForTesting
-import kotlinx.coroutines.experimental.*
+import kotlinx.coroutines.experimental.CoroutineScope
+import kotlinx.coroutines.experimental.Job
+import kotlinx.coroutines.experimental.Unconfined
 import kotlinx.coroutines.experimental.android.UI
+import kotlinx.coroutines.experimental.launch
 import kotlin.coroutines.experimental.CoroutineContext
 
 abstract class BaseViewModel: ViewModel(), LifecycleObserver {

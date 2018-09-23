@@ -11,26 +11,34 @@
     <include layout="@layout/view_empty" />
 
     <ProgressBar
-        android:id="@+id/loading"
+        android:id="@+id/activity_installment_loading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintBottom_toTopOf="@id/payButton"
+        app:layout_constraintBottom_toTopOf="@id/activity_installment_btn_pay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/installmentRecyclerView"
+        android:id="@+id/activity_installment_recycler"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layoutManager="android.support.v7.widget.LinearLayoutManager"
-        app:layout_constraintBottom_toTopOf="@id/payButton"
+        app:layout_constraintBottom_toTopOf="@id/activity_installment_txt_amount"
         app:layout_constraintTop_toTopOf="parent"
         tools:itemCount="1"
-        tools:listitem="@layout/adapter_installment" />
+        tools:listitem="@layout/adapter_installment_info" />
+
+    <TextView
+        android:id="@+id/activity_installment_txt_amount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/activity_installment_btn_pay"
+        tools:text="@tools:sample/lorem"/>
 
     <Button
-        android:id="@+id/payButton"
+        android:id="@+id/activity_installment_btn_pay"
         android:layout_width="match_parent"
         android:layout_height="@dimen/btn_height"
         android:text="@string/button_pay"

@@ -1,6 +1,9 @@
 package caramelo.com.br.mercadolivreteste.ui.payment
 
-import android.arch.lifecycle.*
+import android.arch.lifecycle.Lifecycle
+import android.arch.lifecycle.MediatorLiveData
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.OnLifecycleEvent
 import android.support.annotation.VisibleForTesting
 import caramelo.com.br.mercadolivreteste.extension.RequestException
 import caramelo.com.br.mercadolivreteste.extension.addSource

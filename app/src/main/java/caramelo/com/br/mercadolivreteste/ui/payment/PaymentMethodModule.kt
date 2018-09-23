@@ -17,7 +17,7 @@ class PaymentMethodModule {
     }
 
     @Provides
-    fun provideViewHolder(
+    fun provideViewModel(
             activity: PaymentMethodActivity,
             payment: Payment,
             repository: PaymentRepository

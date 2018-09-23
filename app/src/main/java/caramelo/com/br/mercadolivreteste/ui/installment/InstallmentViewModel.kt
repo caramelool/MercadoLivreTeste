@@ -47,14 +47,22 @@ class InstallmentViewModel(
             try {
                 installment = repository.installment(payment)
                 showInfo()
-                if (installment.payerCosts.isEmpty()) {
-                    showEmpty()
-                }
             } catch (e: RequestException) {
                showError()
             }
             hideLoading()
         }
+    }
+
+    fun setInstallments(installments: Int) {
+        installment.payerCosts
+                .find { it.installments == installments }
+                ?.let { item ->
+                    payment.instalmment = item.installments
+                    setInstallmentText(item.recommendedMessage)
+                    enablePayButton()
+                }
+
     }
 
     private fun showLoading() {
@@ -85,11 +93,15 @@ class InstallmentViewModel(
         installmentState.postValue(State.Received.Error)
     }
 
+    private fun setInstallmentText(message: String) {
+        amountTextState.postValue(State.Layout.InstallmentText(message))
+    }
+
     sealed class State {
         sealed class Layout : State() {
             data class Loading(val loading: Boolean) : Layout()
             data class PayButton(val enable: Boolean) : Layout()
-            data class AmountText(val text: String) : Layout()
+            data class InstallmentText(val text: String) : Layout()
         }
 
         sealed class Received : State() {

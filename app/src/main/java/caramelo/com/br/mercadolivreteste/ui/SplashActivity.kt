@@ -1,9 +1,9 @@
 package caramelo.com.br.mercadolivreteste.ui
 
-import caramelo.com.br.mercadolivreteste.R
 import android.os.Bundle
-import caramelo.com.br.mercadolivreteste.ui.base.BaseActivity
+import caramelo.com.br.mercadolivreteste.R
 import caramelo.com.br.mercadolivreteste.ui.amount.AmountActivity
+import caramelo.com.br.mercadolivreteste.ui.base.BaseActivity
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch

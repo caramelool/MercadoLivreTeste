@@ -4,19 +4,23 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
+import android.widget.EditText
 import caramelo.com.br.mercadolivreteste.R
 import caramelo.com.br.mercadolivreteste.extension.CurrentMaskListener
 import caramelo.com.br.mercadolivreteste.extension.addCurrentMask
+import caramelo.com.br.mercadolivreteste.extension.bind
 import caramelo.com.br.mercadolivreteste.ui.amount.AmountViewModel.State
 import caramelo.com.br.mercadolivreteste.ui.base.BaseActivity
 import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodActivity
 import dagger.android.AndroidInjection
 
-import kotlinx.android.synthetic.main.activity_amount.*
-import kotlinx.android.synthetic.main.content_amount.*
 import javax.inject.Inject
 
 class AmountActivity : BaseActivity(), CurrentMaskListener {
+
+    private val edtAmount: EditText by bind(R.id.activity_amount_edit_amount)
+    private val btnNext: Button by bind(R.id.activity_amount_btn_next)
 
     @Inject
     lateinit var viewModel: AmountViewModel
@@ -33,9 +37,9 @@ class AmountActivity : BaseActivity(), CurrentMaskListener {
         setContentView(R.layout.activity_amount)
         setSupportActionBar(toolbar)
 
-        amountEditText.addCurrentMask(this)
+        edtAmount.addCurrentMask(this)
 
-        nextButton.setOnClickListener {
+        btnNext.setOnClickListener {
             goToPaymentMethod()
         }
 
@@ -55,7 +59,7 @@ class AmountActivity : BaseActivity(), CurrentMaskListener {
     private fun handlerLayout(state: State.Layout) {
         when(state) {
             is State.Layout.NextButton -> {
-                nextButton.isEnabled = state.enable
+                btnNext.isEnabled = state.enable
             }
         }
     }

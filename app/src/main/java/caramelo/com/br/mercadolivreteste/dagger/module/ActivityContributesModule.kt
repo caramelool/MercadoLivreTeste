@@ -1,14 +1,14 @@
 package caramelo.com.br.mercadolivreteste.dagger.module
 
 import caramelo.com.br.mercadolivreteste.model.PaymentModule
-import caramelo.com.br.mercadolivreteste.ui.bank.BankActivity
-import caramelo.com.br.mercadolivreteste.ui.bank.BankModule
-import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodActivity
-import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodModule
 import caramelo.com.br.mercadolivreteste.ui.amount.AmountActivity
 import caramelo.com.br.mercadolivreteste.ui.amount.AmountModule
+import caramelo.com.br.mercadolivreteste.ui.bank.BankActivity
+import caramelo.com.br.mercadolivreteste.ui.bank.BankModule
 import caramelo.com.br.mercadolivreteste.ui.installment.InstallmentActivity
 import caramelo.com.br.mercadolivreteste.ui.installment.InstallmentModule
+import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodActivity
+import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodModule
 import dagger.Module
 import dagger.android.ContributesAndroidInjector
 

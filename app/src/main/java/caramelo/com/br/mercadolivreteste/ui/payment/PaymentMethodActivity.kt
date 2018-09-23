@@ -4,23 +4,29 @@ import android.arch.lifecycle.Observer
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.support.v7.widget.RecyclerView
 import android.view.View
+import android.widget.Button
+import android.widget.ProgressBar
 import caramelo.com.br.mercadolivreteste.R
+import caramelo.com.br.mercadolivreteste.extension.bind
 import caramelo.com.br.mercadolivreteste.model.EXTRA_PAYMENT
 import caramelo.com.br.mercadolivreteste.model.Payment
-import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodViewModel.State
 import caramelo.com.br.mercadolivreteste.ui.bank.BankActivity
 import caramelo.com.br.mercadolivreteste.ui.base.BaseActivity
 import caramelo.com.br.mercadolivreteste.ui.base.ItemAdapter
 import caramelo.com.br.mercadolivreteste.ui.base.ItemData
+import caramelo.com.br.mercadolivreteste.ui.payment.PaymentMethodViewModel.State
 import dagger.android.AndroidInjection
-import kotlinx.android.synthetic.main.activity_payment_method.*
-import kotlinx.android.synthetic.main.content_payment_method.*
 import kotlinx.android.synthetic.main.view_empty.*
 import kotlinx.android.synthetic.main.view_empty.view.*
 import javax.inject.Inject
 
 class PaymentMethodActivity : BaseActivity() {
+
+    private val loading: ProgressBar by bind(R.id.activity_payment_method_loading)
+    private val recycler: RecyclerView by bind(R.id.activity_payment_method_recycler)
+    private val btnNext: Button by bind(R.id.activity_payment_method_btn_next)
 
     @Inject
     lateinit var viewModel: PaymentMethodViewModel
@@ -30,6 +36,7 @@ class PaymentMethodActivity : BaseActivity() {
     companion object {
         fun getIntent(context: Context, payment: Payment): Intent {
             return Intent(context, PaymentMethodActivity::class.java)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
                     .putExtra(EXTRA_PAYMENT, payment)
         }
     }
@@ -40,10 +47,10 @@ class PaymentMethodActivity : BaseActivity() {
         setContentView(R.layout.activity_payment_method)
         setSupportActionBar(toolbar, true)
 
-        paymentMethodRecyclerView.adapter = adapter
-        paymentMethodRecyclerView.setHasFixedSize(true)
+        recycler.adapter = adapter
+        recycler.setHasFixedSize(true)
 
-        nextButton.setOnClickListener {
+        btnNext.setOnClickListener {
             goToBank()
         }
 
@@ -67,7 +74,7 @@ class PaymentMethodActivity : BaseActivity() {
                 }
             }
             is State.Layout.NextButton -> {
-                nextButton.isEnabled = state.enable
+                btnNext.isEnabled = state.enable
             }
         }
 
@@ -88,7 +95,7 @@ class PaymentMethodActivity : BaseActivity() {
     }
 
     private fun handlerError() {
-        nextButton.visibility = View.GONE
+        btnNext.visibility = View.GONE
         emptyView.visibility = View.VISIBLE
         emptyView.emptyText.setText(R.string.payment_method_list_empty_message)
     }
