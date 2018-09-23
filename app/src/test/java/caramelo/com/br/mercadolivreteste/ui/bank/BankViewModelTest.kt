@@ -2,6 +2,7 @@ package caramelo.com.br.mercadolivreteste.ui.bank
 
 import android.arch.lifecycle.Observer
 import caramelo.com.br.mercadolivreteste.BaseUnitTest
+import caramelo.com.br.mercadolivreteste.ModelMock
 import caramelo.com.br.mercadolivreteste.extension.RequestException
 import caramelo.com.br.mercadolivreteste.model.Bank
 import caramelo.com.br.mercadolivreteste.model.Payment
@@ -30,11 +31,7 @@ class BankViewModelTest : BaseUnitTest() {
 
     private lateinit var viewModel: BankViewModel
 
-    private val bankListMock = mutableListOf<Bank>().apply {
-        add(Bank("1", "", "", ""))
-        add(Bank("2", "", "", ""))
-        add(Bank("3", "", "", ""))
-    }
+    private val bankListMock = ModelMock.BANK_LIST
 
     @Before
     fun setUp() {

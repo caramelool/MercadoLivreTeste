@@ -115,11 +115,11 @@ class InstallmentActivity : BaseActivity() {
                     emptyText.setText(R.string.installment_error_message)
                 }
             }
-            is State.Received.Paid -> showPaidSuccess(state)
+            is State.Received.Paid -> showPaidSuccess()
         }
     }
 
-    private fun showPaidSuccess(state: State.Received.Paid) {
+    private fun showPaidSuccess() {
         launch(UI) {
             loading.visibility = View.GONE
             with(successView) {

@@ -27,7 +27,7 @@ class InstallmentViewModel(
             addSource(installmentState)
         }
 
-    private lateinit var installment: Installment
+    lateinit var installment: Installment
 
     @OnLifecycleEvent(Lifecycle.Event.ON_CREATE)
     fun initialize() {

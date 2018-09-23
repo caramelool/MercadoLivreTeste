@@ -2,6 +2,7 @@ package caramelo.com.br.mercadolivreteste.ui.payment
 
 import android.arch.lifecycle.Observer
 import caramelo.com.br.mercadolivreteste.BaseUnitTest
+import caramelo.com.br.mercadolivreteste.ModelMock
 import caramelo.com.br.mercadolivreteste.extension.RequestException
 import caramelo.com.br.mercadolivreteste.model.Payment
 import caramelo.com.br.mercadolivreteste.model.PaymentMethod
@@ -28,11 +29,7 @@ class PaymentMethodViewModelTest : BaseUnitTest() {
 
     private lateinit var viewModel: PaymentMethodViewModel
 
-    private val paymentMethodListMock = mutableListOf<PaymentMethod>().apply {
-        add(PaymentMethod("1", "", "", "", ""))
-        add(PaymentMethod("2", "", "", "", ""))
-        add(PaymentMethod("3", "", "", "", ""))
-    }
+    private val paymentMethodListMock = ModelMock.PAYMENT_METHODS
 
     @Before
     fun setUp() {

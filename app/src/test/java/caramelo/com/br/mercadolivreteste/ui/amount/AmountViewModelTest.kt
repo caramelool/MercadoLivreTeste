@@ -26,7 +26,7 @@ class AmountViewModelTest : BaseUnitTest() {
 
     @Test
     fun `when value was more then 0 should enable button`() {
-        viewModel.amount = 100f
+        viewModel.setAmount(100f)
 
         val argumentCaptor = ArgumentCaptor.forClass(State::class.java)
         val expectedState = State.Layout.NextButton(true)
@@ -40,7 +40,7 @@ class AmountViewModelTest : BaseUnitTest() {
 
     @Test
     fun `when value was less or equals 0 should disable button`() {
-        viewModel.amount = 0f
+        viewModel.setAmount(0f)
 
         val argumentCaptor = ArgumentCaptor.forClass(State::class.java)
         val expectedState = State.Layout.NextButton(false)
@@ -54,7 +54,8 @@ class AmountViewModelTest : BaseUnitTest() {
 
     @Test
     fun `check if the payment value is equals value variable in presenter`() {
-        viewModel.amount = 100f
-        assert(viewModel.payment.amount == viewModel.amount)
+        val amount = 100f
+        viewModel.setAmount(amount)
+        assert(viewModel.payment.amount == amount)
     }
 }
