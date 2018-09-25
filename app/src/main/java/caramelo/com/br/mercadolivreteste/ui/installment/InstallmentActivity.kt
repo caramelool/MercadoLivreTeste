@@ -25,6 +25,7 @@ import kotlinx.android.synthetic.main.view_success.view.*
 import kotlinx.coroutines.experimental.android.UI
 import kotlinx.coroutines.experimental.delay
 import kotlinx.coroutines.experimental.launch
+import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 class InstallmentActivity : BaseActivity() {
@@ -127,7 +128,7 @@ class InstallmentActivity : BaseActivity() {
                 successLottie.playAnimation()
                 successText.setText(R.string.payment_paid_successfully_message)
             }
-            delay(2500)
+            delay(3, TimeUnit.SECONDS)
             goToAmount()
         }
     }

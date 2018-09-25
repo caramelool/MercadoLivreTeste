@@ -8,6 +8,7 @@ import caramelo.com.br.mercadolivreteste.model.Payment
 import caramelo.com.br.mercadolivreteste.repository.PaymentRepository
 import caramelo.com.br.mercadolivreteste.ui.base.BaseViewModel
 import kotlinx.coroutines.experimental.delay
+import java.util.concurrent.TimeUnit
 
 class InstallmentViewModel(
         val payment: Payment,
@@ -78,7 +79,7 @@ class InstallmentViewModel(
     fun pay() {
         runJob {
             showLoading()
-            delay(3000)
+            delay(3, TimeUnit.SECONDS)
             showPaid()
         }
     }
